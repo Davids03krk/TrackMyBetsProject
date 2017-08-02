@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using TrackMyBets.Data.Models;
 
 namespace TrackMyBets.WebApi
 {
@@ -29,6 +32,9 @@ namespace TrackMyBets.WebApi
         {
             // Add framework services.
             services.AddMvc();
+
+            var connection = "Data Source=DESKTOP-IKARG49;Initial Catalog=BD_TRACKMYBETS;Integrated Security=True;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddDbContext<BD_TRACKMYBETSContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

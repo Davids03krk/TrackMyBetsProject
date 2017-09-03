@@ -120,7 +120,13 @@
   <data name="DuplicateSport" xml:space="preserve">
     <value>More than one Sport with these name ({0}).</value>
   </data>
+  <data name="DuplicateTeam" xml:space="preserve">
+    <value>More than one Team with these name ({0}).</value>
+  </data>
   <data name="NotFoundSport" xml:space="preserve">
     <value>Not found Sport with these id ({0}).</value>
+  </data>
+  <data name="NotFoundTeam" xml:space="preserve">
+    <value>Not found Team with these id ({0}).</value>
   </data>
 </root>

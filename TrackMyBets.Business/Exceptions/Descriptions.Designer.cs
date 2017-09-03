@@ -71,11 +71,29 @@ namespace TrackMyBets.Business.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More than one Team with these name ({0})..
+        /// </summary>
+        internal static string DuplicateTeam {
+            get {
+                return ResourceManager.GetString("DuplicateTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found Sport with these id ({0})..
         /// </summary>
         internal static string NotFoundSport {
             get {
                 return ResourceManager.GetString("NotFoundSport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found Team with these id ({0})..
+        /// </summary>
+        internal static string NotFoundTeam {
+            get {
+                return ResourceManager.GetString("NotFoundTeam", resourceCulture);
             }
         }
     }

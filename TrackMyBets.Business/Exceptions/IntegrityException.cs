@@ -33,4 +33,22 @@ namespace TrackMyBets.Business.Exceptions
 
         }
     }
+
+    public class DuplicatedTeamException : IntegrityException
+    {
+        internal DuplicatedTeamException(string data)
+            : base(string.Format(Descriptions.DuplicateTeam, data))
+        {
+
+        }
+    }
+
+    public class NotFoundTeamException : IntegrityException
+    {
+        internal NotFoundTeamException(string data)
+            : base(string.Format(Descriptions.NotFoundTeam, data))
+        {
+
+        }
+    }
 }

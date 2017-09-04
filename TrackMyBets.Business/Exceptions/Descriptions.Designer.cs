@@ -62,6 +62,15 @@ namespace TrackMyBets.Business.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More than one Event with these data ({0})..
+        /// </summary>
+        internal static string DuplicateEvent {
+            get {
+                return ResourceManager.GetString("DuplicateEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More than one Sport with these name ({0})..
         /// </summary>
         internal static string DuplicateSport {
@@ -76,6 +85,15 @@ namespace TrackMyBets.Business.Exceptions {
         internal static string DuplicateTeam {
             get {
                 return ResourceManager.GetString("DuplicateTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found Event with these id ({0})..
+        /// </summary>
+        internal static string NotFoundEvent {
+            get {
+                return ResourceManager.GetString("NotFoundEvent", resourceCulture);
             }
         }
         

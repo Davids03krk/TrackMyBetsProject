@@ -29,6 +29,20 @@ namespace TrackMyBets.Business.Entities
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Method that returns a list with all the team.
+        /// </summary>
+        /// <returns></returns>
+        public static List<TeamEntity> Load()
+        {
+            var teams = new List<TeamEntity>();
+
+            _dbContext.Team.ToList().ForEach(x => teams.Add(TeamEntity.Load(x.IdTeam)));
+
+            return teams;
+        }
+
         /// <summary>
         /// Method that returns the team with the Id passed as parameter. 
         /// </summary>
@@ -42,19 +56,6 @@ namespace TrackMyBets.Business.Entities
                 return null;
 
             return MapFromBD(dbTeam);
-        }
-
-        /// <summary>
-        /// Method that returns a list with all the team.
-        /// </summary>
-        /// <returns></returns>
-        public static List<TeamEntity> Load()
-        {
-            var teams = new List<TeamEntity>();
-
-            _dbContext.Team.ToList().ForEach(x => teams.Add(TeamEntity.Load(x.IdTeam)));
-
-            return teams;
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace TrackMyBets.Business.Entities
         public static void Create(TeamEntity team)
         {
             if (team.Exist())
-                throw new DuplicatedTeamException(team.DescTeam);
+                throw new DuplicatedTeamException(team.ToString());
 
             var dbTeam = team.MapToBD();
             _dbContext.Team.Add(dbTeam);
@@ -119,8 +120,7 @@ namespace TrackMyBets.Business.Entities
             if (dbTeam == null)
                 throw new NotFoundTeamException(IdTeam.ToString());
 
-            //aqui es necesario eliminar los registros que hacen referencia ha este team
-            //EventEntity.Load(this).ForEach(x => x.Delete());
+            EventEntity.Load(this).ForEach(x => x.Delete());
 
             _dbContext.Team.Remove(dbTeam);
             _dbContext.SaveChanges();

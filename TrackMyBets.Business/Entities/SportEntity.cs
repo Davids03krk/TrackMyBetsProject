@@ -24,6 +24,20 @@ namespace TrackMyBets.Business.Entities
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Method that returns a list with all the sport.
+        /// </summary>
+        /// <returns></returns>
+        public static List<SportEntity> Load()
+        {
+            var sports = new List<SportEntity>();
+
+            _dbContext.Sport.ToList().ForEach(x => sports.Add(SportEntity.Load(x.IdSport)));
+
+            return sports;
+        }
+
         /// <summary>
         /// Method that returns the sport with the Id passed as parameter. 
         /// </summary>
@@ -39,24 +53,12 @@ namespace TrackMyBets.Business.Entities
         }
 
         /// <summary>
-        /// Method that returns a list with all the sport.
-        /// </summary>
-        /// <returns></returns>
-        public static List<SportEntity> Load() {
-            var sports = new List<SportEntity>();
-
-            _dbContext.Sport.ToList().ForEach(x => sports.Add(SportEntity.Load(x.IdSport)));
-
-            return sports;
-        }
-
-        /// <summary>
         /// Method that adds to the database the past sport as a parameter.
         /// </summary>
         /// <param name="sport"></param>
         public static void Create(SportEntity sport) {
             if (sport.Exist())
-                throw new DuplicatedSportException(sport.DescSport);
+                throw new DuplicatedSportException(sport.ToString());
             
             var dbSport = sport.MapToBD();
             _dbContext.Sport.Add(dbSport);
@@ -89,9 +91,8 @@ namespace TrackMyBets.Business.Entities
             if (dbSport == null)
                 throw new NotFoundSportException(IdSport.ToString());
 
-            //aqui es necesario eliminar los registros que hacen referencia ha este sport
             TeamEntity.Load(this).ForEach(x => x.Delete());
-            //EventEntity.Load(this).ForEach(x => x.Delete());
+            EventEntity.Load(this).ForEach(x => x.Delete());
 
             _dbContext.Sport.Remove(dbSport);
             _dbContext.SaveChanges();

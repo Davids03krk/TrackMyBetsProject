@@ -98,6 +98,15 @@ namespace TrackMyBets.Business.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not found Pick with these id ({0})..
+        /// </summary>
+        internal static string NotFoundPick {
+            get {
+                return ResourceManager.GetString("NotFoundPick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found Sport with these id ({0})..
         /// </summary>
         internal static string NotFoundSport {

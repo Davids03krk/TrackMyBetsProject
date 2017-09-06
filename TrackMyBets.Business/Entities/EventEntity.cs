@@ -6,7 +6,7 @@ using TrackMyBets.Business.Exceptions;
 
 namespace TrackMyBets.Business.Entities
 {
-    class EventEntity
+    public class EventEntity
     {
         #region DBContext
         private static BD_TRACKMYBETSContext _dbContext;
@@ -136,8 +136,7 @@ namespace TrackMyBets.Business.Entities
             if (dbEvent == null)
                 throw new NotFoundEventException(IdEvent.ToString());
 
-            //aqui es necesario eliminar los registros que hacen referencia ha este event
-            //PickEntity.Load(this).ForEach(x => x.Delete());
+            PickEntity.Load(this).ForEach(x => x.Delete());
 
             _dbContext.Event.Remove(dbEvent);
             _dbContext.SaveChanges();

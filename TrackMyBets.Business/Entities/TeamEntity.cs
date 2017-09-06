@@ -5,7 +5,7 @@ using TrackMyBets.Business.Exceptions;
 
 namespace TrackMyBets.Business.Entities
 {
-    class TeamEntity
+    public class TeamEntity
     {
         #region DBContext
         private static BD_TRACKMYBETSContext _dbContext;

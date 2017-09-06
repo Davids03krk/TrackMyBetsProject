@@ -69,4 +69,13 @@ namespace TrackMyBets.Business.Exceptions
 
         }
     }
+
+    public class NotFoundPickException : IntegrityException
+    {
+        internal NotFoundPickException(string data)
+            : base(string.Format(Descriptions.NotFoundPick, data))
+        {
+
+        }
+    }
 }

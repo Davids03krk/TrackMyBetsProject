@@ -56,7 +56,7 @@ namespace TrackMyBets.Business.Entities
         }
 
         /// <summary>
-        /// Method that returns a list of picks of a sports event passed as a parameter..
+        /// Method that returns a list of picks of a sports event passed as a parameter.
         /// </summary>
         /// <returns></returns>
         public static List<PickEntity> Load(EventEntity evento)
@@ -66,6 +66,23 @@ namespace TrackMyBets.Business.Entities
             _dbContext.Pick.ToList().ForEach(x =>
             {
                 if (x.IdEvent == evento.IdEvent)
+                    picks.Add(PickEntity.Load(x.IdPick));
+            });
+
+            return picks;
+        }
+
+        /// <summary>
+        /// Method that returns a list of picks of a bet passed as a parameter.
+        /// </summary>
+        /// <returns></returns>
+        public static List<PickEntity> Load(BetEntity bet)
+        {
+            var picks = new List<PickEntity>();
+
+            _dbContext.Pick.ToList().ForEach(x =>
+            {
+                if (x.IdBet == bet.IdBet)
                     picks.Add(PickEntity.Load(x.IdPick));
             });
 

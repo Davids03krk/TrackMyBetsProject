@@ -135,11 +135,17 @@
   <data name="DuplicateUser" xml:space="preserve">
     <value>More than one User with these nick ({0}).</value>
   </data>
+  <data name="NotFoundBet" xml:space="preserve">
+    <value>Not found Bet with these id ({0}).</value>
+  </data>
   <data name="NotFoundBookmaker" xml:space="preserve">
     <value>Not found Bookmaker with these id ({0}).</value>
   </data>
   <data name="NotFoundEvent" xml:space="preserve">
     <value>Not found Event with these id ({0}).</value>
+  </data>
+  <data name="NotFoundIncome" xml:space="preserve">
+    <value>Not found Income with these id ({0}).</value>
   </data>
   <data name="NotFoundPick" xml:space="preserve">
     <value>Not found Pick with these id ({0}).</value>
@@ -155,5 +161,8 @@
   </data>
   <data name="NotFoundUser" xml:space="preserve">
     <value>Not found User with these id ({0}).</value>
+  </data>
+  <data name="NotFoundWithdrawal" xml:space="preserve">
+    <value>Not found Withdrawal with these id ({0}).</value>
   </data>
 </root>

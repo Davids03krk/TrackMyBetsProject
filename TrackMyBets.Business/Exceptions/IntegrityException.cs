@@ -132,4 +132,31 @@ namespace TrackMyBets.Business.Exceptions
 
         }
     }
+
+    public class NotFoundIncomeException : IntegrityException
+    {
+        internal NotFoundIncomeException(string data)
+            : base(string.Format(Descriptions.NotFoundTeam, data))
+        {
+
+        }
+    }
+
+    public class NotFoundWithdrawalException : IntegrityException
+    {
+        internal NotFoundWithdrawalException(string data)
+            : base(string.Format(Descriptions.NotFoundTeam, data))
+        {
+
+        }
+    }
+
+    public class NotFoundBetException : IntegrityException
+    {
+        internal NotFoundBetException(string data)
+            : base(string.Format(Descriptions.NotFoundTeam, data))
+        {
+
+        }
+    }
 }

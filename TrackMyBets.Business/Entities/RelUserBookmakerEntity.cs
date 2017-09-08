@@ -132,9 +132,9 @@ namespace TrackMyBets.Business.Entities
             if (dbRelUserBookmaker == null)
                 throw new NotFoundRelUserBookmakerException(IdRelUserBookmaker.ToString());
 
-            //BetEntity.Load(this).ForEach(x => x.Delete());
-            //IncomeEntity.Load(this).ForEach(x => x.Delete());
-            //WithdrawalEntity.Load(this).ForEach(x => x.Delete());
+            BetEntity.Load(this).ForEach(x => x.Delete());
+            IncomeEntity.Load(this).ForEach(x => x.Delete());
+            WithdrawalEntity.Load(this).ForEach(x => x.Delete());
 
             _dbContext.RelUserBookmaker.Remove(dbRelUserBookmaker);
             _dbContext.SaveChanges();

@@ -20,7 +20,7 @@ namespace TrackMyBets.Business.Exceptions {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Descriptions {
@@ -116,6 +116,15 @@ namespace TrackMyBets.Business.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not found Bet with these id ({0})..
+        /// </summary>
+        internal static string NotFoundBet {
+            get {
+                return ResourceManager.GetString("NotFoundBet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found Bookmaker with these id ({0})..
         /// </summary>
         internal static string NotFoundBookmaker {
@@ -130,6 +139,15 @@ namespace TrackMyBets.Business.Exceptions {
         internal static string NotFoundEvent {
             get {
                 return ResourceManager.GetString("NotFoundEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found Income with these id ({0})..
+        /// </summary>
+        internal static string NotFoundIncome {
+            get {
+                return ResourceManager.GetString("NotFoundIncome", resourceCulture);
             }
         }
         
@@ -175,6 +193,15 @@ namespace TrackMyBets.Business.Exceptions {
         internal static string NotFoundUser {
             get {
                 return ResourceManager.GetString("NotFoundUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found Withdrawal with these id ({0})..
+        /// </summary>
+        internal static string NotFoundWithdrawal {
+            get {
+                return ResourceManager.GetString("NotFoundWithdrawal", resourceCulture);
             }
         }
     }

@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrackMyBets.Data\TrackMyBets.Data.csproj" />
-    <ProjectReference Include="..\TrackMyBets.Model\TrackMyBets.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

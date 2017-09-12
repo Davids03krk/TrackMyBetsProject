@@ -35,8 +35,6 @@ namespace TrackMyBets.WebApi
 
             var connection = "Data Source=DESKTOP-IKARG49;Initial Catalog=BD_TRACKMYBETS;Integrated Security=True;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<BD_TRACKMYBETSContext>(options => options.UseSqlServer(connection));
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

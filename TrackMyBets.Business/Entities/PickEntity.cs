@@ -185,7 +185,6 @@ namespace TrackMyBets.Business.Entities
             pickEntity.IdBet = dbPick.IdBet;
             pickEntity.IdEvent = dbPick.IdEvent;
             pickEntity.IdPickType = dbPick.IdPickType;
-            // TODO. Convertir Int en PickType -> (PickType)Enum.Parse(typeof(PickType), dbPick.IdPickType.ToString());
 
             return pickEntity;
         }

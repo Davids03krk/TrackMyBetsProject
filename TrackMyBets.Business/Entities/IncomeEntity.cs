@@ -147,13 +147,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Income MapToBD()
         {
-            var dbIncome = new Income();
-
-            dbIncome.Amount = Amount;
-            dbIncome.Comment = Comment;
-            dbIncome.DateIncome = DateIncome;
-            dbIncome.IsFreeBonus = IsFreeBonus;
-            dbIncome.IdRelUserBookmaker = IdRelUserBookmaker;
+            var dbIncome = new Income
+            {
+                Amount = Amount,
+                Comment = Comment,
+                DateIncome = DateIncome,
+                IsFreeBonus = IsFreeBonus,
+                IdRelUserBookmaker = IdRelUserBookmaker
+            };
 
             return dbIncome;
         }
@@ -165,14 +166,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static IncomeEntity MapFromBD(Income dbIncome)
         {
-            var incomeEntity = new IncomeEntity(_dbContext);
-
-            incomeEntity.IdIncome = dbIncome.IdIncome;
-            incomeEntity.Amount = dbIncome.Amount;
-            incomeEntity.Comment = dbIncome.Comment;
-            incomeEntity.DateIncome = dbIncome.DateIncome;
-            incomeEntity.IsFreeBonus = dbIncome.IsFreeBonus;
-            incomeEntity.IdRelUserBookmaker = dbIncome.IdRelUserBookmaker;
+            var incomeEntity = new IncomeEntity(_dbContext)
+            {
+                IdIncome = dbIncome.IdIncome,
+                Amount = dbIncome.Amount,
+                Comment = dbIncome.Comment,
+                DateIncome = dbIncome.DateIncome,
+                IsFreeBonus = dbIncome.IsFreeBonus,
+                IdRelUserBookmaker = dbIncome.IdRelUserBookmaker
+            };
 
             return incomeEntity;
         }

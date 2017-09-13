@@ -168,13 +168,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Event MapToBD()
         {
-            var dbEvent = new Event();
-
-            dbEvent.Comment = Comment;
-            dbEvent.DateEvent = DateEvent;
-            dbEvent.IdLocalTeam = IdLocalTeam;
-            dbEvent.IdVisitTeam = IdVisitTeam;
-            dbEvent.IdSport = IdSport;
+            var dbEvent = new Event
+            {
+                Comment = Comment,
+                DateEvent = DateEvent,
+                IdLocalTeam = IdLocalTeam,
+                IdVisitTeam = IdVisitTeam,
+                IdSport = IdSport
+            };
 
             return dbEvent;
         }
@@ -186,14 +187,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static EventEntity MapFromBD(Event dbEvent)
         {
-            var eventEntity = new EventEntity(_dbContext);
-
-            eventEntity.IdEvent = dbEvent.IdEvent;
-            eventEntity.Comment = dbEvent.Comment;
-            eventEntity.DateEvent = dbEvent.DateEvent;
-            eventEntity.IdLocalTeam = dbEvent.IdLocalTeam;
-            eventEntity.IdVisitTeam = dbEvent.IdVisitTeam;
-            eventEntity.IdSport = dbEvent.IdSport;
+            var eventEntity = new EventEntity(_dbContext)
+            {
+                IdEvent = dbEvent.IdEvent,
+                Comment = dbEvent.Comment,
+                DateEvent = dbEvent.DateEvent,
+                IdLocalTeam = dbEvent.IdLocalTeam,
+                IdVisitTeam = dbEvent.IdVisitTeam,
+                IdSport = dbEvent.IdSport
+            };
 
             return eventEntity;
         }

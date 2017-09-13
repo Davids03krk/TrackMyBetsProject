@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Exceptions;
@@ -126,12 +125,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal TypePickTotalPoints MapToBD()
         {
-            var dbTypePickTotalPoints = new TypePickTotalPoints();
-
-            dbTypePickTotalPoints.IdPick = IdPick;
-            dbTypePickTotalPoints.IsOver = IsOver;
-            dbTypePickTotalPoints.IsUnder = IsUnder;
-            dbTypePickTotalPoints.ValueTotalPoints = ValueTotalPoints;
+            var dbTypePickTotalPoints = new TypePickTotalPoints
+            {
+                IdPick = IdPick,
+                IsOver = IsOver,
+                IsUnder = IsUnder,
+                ValueTotalPoints = ValueTotalPoints
+            };
 
             return dbTypePickTotalPoints;
         }
@@ -143,12 +143,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TypePickTotalPointsEntity MapFromBD(TypePickTotalPoints dbTypePickTotalPoints)
         {
-            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext);
-
-            typePickTotalPointsEntity.IdPick = dbTypePickTotalPoints.IdPick;
-            typePickTotalPointsEntity.IsOver = dbTypePickTotalPoints.IsOver;
-            typePickTotalPointsEntity.IsUnder = dbTypePickTotalPoints.IsUnder;
-            typePickTotalPointsEntity.ValueTotalPoints = dbTypePickTotalPoints.ValueTotalPoints;
+            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext)
+            {
+                IdPick = dbTypePickTotalPoints.IdPick,
+                IsOver = dbTypePickTotalPoints.IsOver,
+                IsUnder = dbTypePickTotalPoints.IsUnder,
+                ValueTotalPoints = dbTypePickTotalPoints.ValueTotalPoints
+            };
 
             return typePickTotalPointsEntity;
         }

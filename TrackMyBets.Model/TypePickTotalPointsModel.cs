@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Business.Functions;
 using TrackMyBets.Data.Models;
@@ -47,12 +45,13 @@ namespace TrackMyBets.Model
 
         public TypePickTotalPointsEntity ToEntities()
         {
-            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext);
-
-            typePickTotalPointsEntity.IdPick = this.IdPick;
-            typePickTotalPointsEntity.IsOver = this.IsOver;
-            typePickTotalPointsEntity.IsUnder = this.IsUnder;
-            typePickTotalPointsEntity.ValueTotalPoints = this.ValueTotalPoints;
+            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext)
+            {
+                IdPick = IdPick,
+                IsOver = IsOver,
+                IsUnder = IsUnder,
+                ValueTotalPoints = ValueTotalPoints
+            };
 
             return typePickTotalPointsEntity;
         }

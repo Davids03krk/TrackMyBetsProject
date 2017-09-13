@@ -126,9 +126,10 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Bookmaker MapToBD()
         {
-            var dbBookmaker = new Bookmaker();
-
-            dbBookmaker.DescBookmaker = DescBookmaker;
+            var dbBookmaker = new Bookmaker
+            {
+                DescBookmaker = DescBookmaker
+            };
 
             return dbBookmaker;
         }
@@ -140,10 +141,11 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static BookmakerEntity MapFromBD(Bookmaker dbBookmaker)
         {
-            var bookmakerEntity = new BookmakerEntity(_dbContext);
-
-            bookmakerEntity.IdBookmaker = dbBookmaker.IdBookmaker;
-            bookmakerEntity.DescBookmaker = dbBookmaker.DescBookmaker;
+            var bookmakerEntity = new BookmakerEntity(_dbContext)
+            {
+                IdBookmaker = dbBookmaker.IdBookmaker,
+                DescBookmaker = dbBookmaker.DescBookmaker
+            };
 
             return bookmakerEntity;
         }

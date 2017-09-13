@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Exceptions;
@@ -163,11 +162,12 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Pick MapToBD()
         {
-            var dbPick = new Pick();
-
-            dbPick.IdBet = IdBet;
-            dbPick.IdEvent = IdEvent;
-            dbPick.IdPickType = IdPickType;
+            var dbPick = new Pick
+            {
+                IdBet = IdBet,
+                IdEvent = IdEvent,
+                IdPickType = IdPickType
+            };
 
             return dbPick;
         }
@@ -179,12 +179,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static PickEntity MapFromBD(Pick dbPick)
         {
-            var pickEntity = new PickEntity(_dbContext);
-
-            pickEntity.IdPick = dbPick.IdPick;
-            pickEntity.IdBet = dbPick.IdBet;
-            pickEntity.IdEvent = dbPick.IdEvent;
-            pickEntity.IdPickType = dbPick.IdPickType;
+            var pickEntity = new PickEntity(_dbContext)
+            {
+                IdPick = dbPick.IdPick,
+                IdBet = dbPick.IdBet,
+                IdEvent = dbPick.IdEvent,
+                IdPickType = dbPick.IdPickType
+            };
 
             return pickEntity;
         }

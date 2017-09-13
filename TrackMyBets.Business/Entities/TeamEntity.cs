@@ -152,13 +152,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Team MapToBD()
         {
-            var dbTeam = new Team();
-
-            dbTeam.DescTeam = DescTeam;
-            dbTeam.Name = Name;
-            dbTeam.City = City;
-            dbTeam.Stadium = Stadium;
-            dbTeam.IdSport = IdSport;
+            var dbTeam = new Team
+            {
+                DescTeam = DescTeam,
+                Name = Name,
+                City = City,
+                Stadium = Stadium,
+                IdSport = IdSport
+            };
 
             return dbTeam;
         }
@@ -170,14 +171,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TeamEntity MapFromBD(Team dbTeam)
         {
-            var teamEntity = new TeamEntity(_dbContext);
-
-            teamEntity.IdTeam = dbTeam.IdTeam;
-            teamEntity.DescTeam = dbTeam.DescTeam;
-            teamEntity.Name = dbTeam.Name;
-            teamEntity.City = dbTeam.City;
-            teamEntity.Stadium = dbTeam.Stadium;
-            teamEntity.IdSport = dbTeam.IdSport;
+            var teamEntity = new TeamEntity(_dbContext)
+            {
+                IdTeam = dbTeam.IdTeam,
+                DescTeam = dbTeam.DescTeam,
+                Name = dbTeam.Name,
+                City = dbTeam.City,
+                Stadium = dbTeam.Stadium,
+                IdSport = dbTeam.IdSport
+            };
 
             return teamEntity;
         }

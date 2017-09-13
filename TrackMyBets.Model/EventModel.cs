@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Data.Models;
@@ -54,14 +53,15 @@ namespace TrackMyBets.Model
 
         public EventEntity ToEntities()
         {
-            var eventEntity = new EventEntity(_dbContext);
-
-            eventEntity.IdEvent = this.IdEvent;
-            eventEntity.Comment = this.Comment;
-            eventEntity.DateEvent = this.DateEvent;
-            eventEntity.IdLocalTeam = this.LocalTeam.IdTeam;
-            eventEntity.IdVisitTeam = this.VisitTeam.IdTeam;
-            eventEntity.IdSport = this.Sport.IdSport;
+            var eventEntity = new EventEntity(_dbContext)
+            {
+                IdEvent = IdEvent,
+                Comment = Comment,
+                DateEvent = DateEvent,
+                IdLocalTeam = LocalTeam.IdTeam,
+                IdVisitTeam = VisitTeam.IdTeam,
+                IdSport = Sport.IdSport
+            };
 
             return eventEntity;
         }

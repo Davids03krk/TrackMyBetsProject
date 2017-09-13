@@ -145,12 +145,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Withdrawal MapToBD()
         {
-            var dbWithdrawal = new Withdrawal();
-
-            dbWithdrawal.Amount = Amount;
-            dbWithdrawal.Comment = Comment;
-            dbWithdrawal.DateWithdrawal = DateWithdrawal;
-            dbWithdrawal.IdRelUserBookmaker = IdRelUserBookmaker;
+            var dbWithdrawal = new Withdrawal
+            {
+                Amount = Amount,
+                Comment = Comment,
+                DateWithdrawal = DateWithdrawal,
+                IdRelUserBookmaker = IdRelUserBookmaker
+            };
 
             return dbWithdrawal;
         }
@@ -162,13 +163,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static WithdrawalEntity MapFromBD(Withdrawal dbWithdrawal)
         {
-            var withdrawalEntity = new WithdrawalEntity(_dbContext);
-
-            withdrawalEntity.IdWithdrawal = dbWithdrawal.IdWithdrawal;
-            withdrawalEntity.Amount = dbWithdrawal.Amount;
-            withdrawalEntity.Comment = dbWithdrawal.Comment;
-            withdrawalEntity.DateWithdrawal = dbWithdrawal.DateWithdrawal;
-            withdrawalEntity.IdRelUserBookmaker = dbWithdrawal.IdRelUserBookmaker;
+            var withdrawalEntity = new WithdrawalEntity(_dbContext)
+            {
+                IdWithdrawal = dbWithdrawal.IdWithdrawal,
+                Amount = dbWithdrawal.Amount,
+                Comment = dbWithdrawal.Comment,
+                DateWithdrawal = dbWithdrawal.DateWithdrawal,
+                IdRelUserBookmaker = dbWithdrawal.IdRelUserBookmaker
+            };
 
             return withdrawalEntity;
         }

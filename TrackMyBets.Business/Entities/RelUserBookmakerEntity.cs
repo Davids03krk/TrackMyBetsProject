@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Exceptions;
@@ -166,11 +165,12 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal RelUserBookmaker MapToBD()
         {
-            var dbRelUserBookmaker = new RelUserBookmaker();
-
-            dbRelUserBookmaker.Bankroll = Bankroll;
-            dbRelUserBookmaker.IdUser = IdUser;
-            dbRelUserBookmaker.IdBookmaker = IdBookmaker;
+            var dbRelUserBookmaker = new RelUserBookmaker
+            {
+                Bankroll = Bankroll,
+                IdUser = IdUser,
+                IdBookmaker = IdBookmaker
+            };
 
             return dbRelUserBookmaker;
         }
@@ -182,12 +182,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static RelUserBookmakerEntity MapFromBD(RelUserBookmaker dbRelUserBookmaker)
         {
-            var relUserBookmakerEntity = new RelUserBookmakerEntity(_dbContext);
-
-            relUserBookmakerEntity.IdRelUserBookmaker = dbRelUserBookmaker.IdRelUserBookmaker;
-            relUserBookmakerEntity.Bankroll = dbRelUserBookmaker.Bankroll;
-            relUserBookmakerEntity.IdUser = dbRelUserBookmaker.IdUser;
-            relUserBookmakerEntity.IdBookmaker = dbRelUserBookmaker.IdBookmaker;
+            var relUserBookmakerEntity = new RelUserBookmakerEntity(_dbContext)
+            {
+                IdRelUserBookmaker = dbRelUserBookmaker.IdRelUserBookmaker,
+                Bankroll = dbRelUserBookmaker.Bankroll,
+                IdUser = dbRelUserBookmaker.IdUser,
+                IdBookmaker = dbRelUserBookmaker.IdBookmaker
+            };
 
             return relUserBookmakerEntity;
         }

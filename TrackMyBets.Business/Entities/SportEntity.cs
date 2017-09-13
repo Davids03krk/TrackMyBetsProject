@@ -121,10 +121,11 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         /// <returns></returns>
         internal Sport MapToBD() {
-            var dbSport = new Sport();
-
-            dbSport.DescSport = DescSport;
-            dbSport.DurationMatchInHours = DurationMatchInHours;
+            var dbSport = new Sport
+            {
+                DescSport = DescSport,
+                DurationMatchInHours = DurationMatchInHours
+            };
 
             return dbSport;
         }
@@ -135,11 +136,12 @@ namespace TrackMyBets.Business.Entities
         /// <param name="dbSport"></param>
         /// <returns></returns>
         internal static SportEntity MapFromBD(Sport dbSport) {
-            var sportEntity = new SportEntity(_dbContext);
-
-            sportEntity.IdSport = dbSport.IdSport;
-            sportEntity.DescSport = dbSport.DescSport;
-            sportEntity.DurationMatchInHours = dbSport.DurationMatchInHours;
+            var sportEntity = new SportEntity(_dbContext)
+            {
+                IdSport = dbSport.IdSport,
+                DescSport = dbSport.DescSport,
+                DurationMatchInHours = dbSport.DurationMatchInHours
+            };
 
             return sportEntity;
         }

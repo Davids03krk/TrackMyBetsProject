@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Data.Models;
 
@@ -43,11 +41,12 @@ namespace TrackMyBets.Model
 
         public SportEntity ToEntities()
         {
-            var sportEntity = new SportEntity(_dbContext);
-
-            sportEntity.IdSport = this.IdSport;
-            sportEntity.DescSport = this.DescSport;
-            sportEntity.DurationMatchInHours = this.DurationMatchInHours;
+            var sportEntity = new SportEntity(_dbContext)
+            {
+                IdSport = IdSport,
+                DescSport = DescSport,
+                DurationMatchInHours = DurationMatchInHours
+            };
 
             return sportEntity;
         }

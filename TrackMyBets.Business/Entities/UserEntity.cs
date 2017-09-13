@@ -140,16 +140,17 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal User MapToBD()
         {
-            var dbUser = new User();
-
-            dbUser.Nick = Nick;
-            dbUser.Password = Password;
-            dbUser.Name = Name;
-            dbUser.SurnameFirst = SurnameFirst;
-            dbUser.SurnameSecond = SurnameSecond;
-            dbUser.Email = Email;
-            dbUser.Telefono = Telefono;
-            dbUser.Direccion = Direccion;
+            var dbUser = new User
+            {
+                Nick = Nick,
+                Password = Password,
+                Name = Name,
+                SurnameFirst = SurnameFirst,
+                SurnameSecond = SurnameSecond,
+                Email = Email,
+                Telefono = Telefono,
+                Direccion = Direccion
+            };
 
             return dbUser;
         }
@@ -161,17 +162,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static UserEntity MapFromBD(User dbUser)
         {
-            var userEntity = new UserEntity(_dbContext);
-
-            userEntity.IdUser = dbUser.IdUser;
-            userEntity.Nick = dbUser.Nick;
-            userEntity.Password = dbUser.Password;
-            userEntity.Name = dbUser.Name;
-            userEntity.SurnameFirst = dbUser.SurnameFirst;
-            userEntity.SurnameSecond = dbUser.SurnameSecond;
-            userEntity.Email = dbUser.Email;
-            userEntity.Telefono = dbUser.Telefono;
-            userEntity.Direccion = dbUser.Direccion;
+            var userEntity = new UserEntity(_dbContext)
+            {
+                IdUser = dbUser.IdUser,
+                Nick = dbUser.Nick,
+                Password = dbUser.Password,
+                Name = dbUser.Name,
+                SurnameFirst = dbUser.SurnameFirst,
+                SurnameSecond = dbUser.SurnameSecond,
+                Email = dbUser.Email,
+                Telefono = dbUser.Telefono,
+                Direccion = dbUser.Direccion
+            };
 
             return userEntity;
         }

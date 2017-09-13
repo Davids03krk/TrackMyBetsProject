@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrackMyBets.Business.Functions;
-using TrackMyBets.Data.Models;
+﻿using TrackMyBets.Business.Functions;
 
 namespace TrackMyBets.Model
 {

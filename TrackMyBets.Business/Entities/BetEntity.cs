@@ -157,17 +157,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal Bet MapToBD()
         {
-            var dbBet = new Bet();
-
-            dbBet.DateBet = DateBet;
-            dbBet.IsLiveBet = IsLiveBet;
-            dbBet.IsCombinedBet = IsCombinedBet;
-            dbBet.Stake = Stake;
-            dbBet.Quota = Quota;
-            dbBet.Profits = Profits;
-            dbBet.Benefits = Benefits;
-            dbBet.IdRelUserBookmaker = IdRelUserBookmaker;
-            dbBet.IdStatusType = IdStatusType;
+            var dbBet = new Bet
+            {
+                DateBet = DateBet,
+                IsLiveBet = IsLiveBet,
+                IsCombinedBet = IsCombinedBet,
+                Stake = Stake,
+                Quota = Quota,
+                Profits = Profits,
+                Benefits = Benefits,
+                IdRelUserBookmaker = IdRelUserBookmaker,
+                IdStatusType = IdStatusType
+            };
 
             return dbBet;
         }
@@ -179,19 +180,20 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static BetEntity MapFromBD(Bet dbBet)
         {
-            var betEntity = new BetEntity(_dbContext);
+            var betEntity = new BetEntity(_dbContext)
+            {
+                IdBet = dbBet.IdBet,
+                DateBet = dbBet.DateBet,
+                IsLiveBet = dbBet.IsLiveBet,
+                IsCombinedBet = dbBet.IsCombinedBet,
+                Stake = dbBet.Stake,
+                Quota = dbBet.Quota,
+                Profits = dbBet.Profits,
+                Benefits = dbBet.Benefits,
+                IdRelUserBookmaker = dbBet.IdRelUserBookmaker,
+                IdStatusType = dbBet.IdStatusType
+            };
 
-            betEntity.IdBet = dbBet.IdBet;
-            betEntity.DateBet = dbBet.DateBet;
-            betEntity.IsLiveBet = dbBet.IsLiveBet;
-            betEntity.IsCombinedBet = dbBet.IsCombinedBet;
-            betEntity.Stake = dbBet.Stake;
-            betEntity.Quota = dbBet.Quota;
-            betEntity.Profits = dbBet.Profits;
-            betEntity.Benefits = dbBet.Benefits;
-            betEntity.IdRelUserBookmaker = dbBet.IdRelUserBookmaker;
-            betEntity.IdStatusType = dbBet.IdStatusType;
-            
             return betEntity;
         }
         #endregion

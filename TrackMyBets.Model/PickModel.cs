@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Business.Functions;
@@ -23,8 +22,8 @@ namespace TrackMyBets.Model
         #region Properties
         public int IdPick { get; set; }
 
-        //[Required]
-        //public BetModel Bet { get; set; }
+        [Required]
+        public BetModel Bet { get; set; }
 
         [Required]
         public EventModel Event { get; set; }
@@ -42,31 +41,41 @@ namespace TrackMyBets.Model
             PickModel pickModel = new PickModel(_dbContext)
             {
                 IdPick = pick.IdPick,
-                //Bet = BetModel.FromEntity(BetEntity.Load(pick.IdBet)),
+                Bet = BetModel.FromEntity(BetEntity.Load(pick.IdBet)),
                 Event = EventModel.FromEntity(EventEntity.Load(pick.IdEvent)),
                 TypePickValue = (Enumerators.PickTypes)Enum.Parse(typeof(Enumerators.PickTypes), pick.IdPickType.ToString())
             };
 
-
-            // TODO. Refactorizar esto.
-            if (pickModel.TypePickValue == Enumerators.PickTypes.WINNER)
-                pickModel.TypePickData = TypePickWinnerModel.FromEntity(TypePickWinnerEntity.Load(pick.IdPick));
-            else if (pickModel.TypePickValue == Enumerators.PickTypes.TOTAL_POINTS)
-                pickModel.TypePickData = TypePickTotalPointsModel.FromEntity(TypePickTotalPointsEntity.Load(pick.IdPick));
+            pickModel.TypePickData = GetTypePickData(pickModel.TypePickValue, pickModel.IdPick);           
 
             return pickModel;
         }
 
         public PickEntity ToEntities()
         {
-            var pickEntity = new PickEntity(_dbContext);
-
-            pickEntity.IdPick = this.IdPick;
-            //pickEntity.IdBet = this.Bet.IdBet;
-            pickEntity.IdEvent = this.Event.IdEvent;
-            pickEntity.IdPickType = (int)this.TypePickData.TypePick;
+            var pickEntity = new PickEntity(_dbContext)
+            {
+                IdPick = IdPick,
+                IdBet = Bet.IdBet,
+                IdEvent = Event.IdEvent,
+                IdPickType = (int)TypePickValue
+            };
 
             return pickEntity;
+        }
+        #endregion
+
+        #region Internal Method
+        internal static TypePickModel GetTypePickData(Enumerators.PickTypes pickType, int IdPick)
+        {
+            switch (pickType) {
+                case Enumerators.PickTypes.WINNER:
+                    return TypePickWinnerModel.FromEntity(TypePickWinnerEntity.Load(IdPick));
+                case Enumerators.PickTypes.TOTAL_POINTS:
+                    return TypePickTotalPointsModel.FromEntity(TypePickTotalPointsEntity.Load(IdPick));
+                default:
+                    return null;
+            }
         }
         #endregion
     }

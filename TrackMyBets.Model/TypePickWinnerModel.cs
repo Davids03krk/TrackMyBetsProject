@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Business.Functions;
 using TrackMyBets.Data.Models;
@@ -46,12 +44,13 @@ namespace TrackMyBets.Model
 
         public TypePickWinnerEntity ToEntities()
         {
-            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext);
-
-            typePickWinnerEntity.IdPick = this.IdPick;
-            typePickWinnerEntity.HasHandicap = this.HasHandicap;
-            typePickWinnerEntity.ValueHandicap = this.ValueHandicap;
-            typePickWinnerEntity.IdWinnerTeam = this.WinnerTeam.IdTeam;
+            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext)
+            {
+                IdPick = IdPick,
+                HasHandicap = HasHandicap,
+                ValueHandicap = ValueHandicap,
+                IdWinnerTeam = WinnerTeam.IdTeam
+            };
 
             return typePickWinnerEntity;
         }

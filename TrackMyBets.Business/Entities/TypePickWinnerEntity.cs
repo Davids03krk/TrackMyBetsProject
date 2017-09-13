@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Exceptions;
@@ -126,12 +125,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal TypePickWinner MapToBD()
         {
-            var dbTypePickWinner = new TypePickWinner();
-
-            dbTypePickWinner.IdPick = IdPick;
-            dbTypePickWinner.HasHandicap = HasHandicap;
-            dbTypePickWinner.ValueHandicap = ValueHandicap;
-            dbTypePickWinner.IdWinnerTeam = IdWinnerTeam;
+            var dbTypePickWinner = new TypePickWinner
+            {
+                IdPick = IdPick,
+                HasHandicap = HasHandicap,
+                ValueHandicap = ValueHandicap,
+                IdWinnerTeam = IdWinnerTeam
+            };
 
             return dbTypePickWinner;
         }
@@ -143,12 +143,13 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TypePickWinnerEntity MapFromBD(TypePickWinner dbTypePickWinner)
         {
-            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext);
-
-            typePickWinnerEntity.IdPick = dbTypePickWinner.IdPick;
-            typePickWinnerEntity.HasHandicap = dbTypePickWinner.HasHandicap;
-            typePickWinnerEntity.ValueHandicap = dbTypePickWinner.ValueHandicap;
-            typePickWinnerEntity.IdWinnerTeam = dbTypePickWinner.IdWinnerTeam;
+            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext)
+            {
+                IdPick = dbTypePickWinner.IdPick,
+                HasHandicap = dbTypePickWinner.HasHandicap,
+                ValueHandicap = dbTypePickWinner.ValueHandicap,
+                IdWinnerTeam = dbTypePickWinner.IdWinnerTeam
+            };
 
             return typePickWinnerEntity;
         }

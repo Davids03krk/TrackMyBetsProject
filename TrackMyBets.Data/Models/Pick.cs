@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TrackMyBets.Data.Models
+﻿namespace TrackMyBets.Data.Models
 {
     public partial class Pick
     {

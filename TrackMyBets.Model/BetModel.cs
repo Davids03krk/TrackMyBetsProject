@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using TrackMyBets.Business.Entities;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Functions;
+using System.Collections.Generic;
 
 namespace TrackMyBets.Model
 {
@@ -30,6 +31,8 @@ namespace TrackMyBets.Model
 
         [Required]
         public BookmakerModel Bookmaker { get; set; }
+
+        public List<PickModel> Picks { get; set }
 
         [Required]
         public DateTime DateBet { get; set; }
@@ -73,6 +76,11 @@ namespace TrackMyBets.Model
                 StatusType = (Enumerators.StatusType)Enum.Parse(typeof(Enumerators.StatusType), bet.IdStatusType.ToString())
             };
 
+            PickEntity.Load(bet).ForEach(pick => {
+                    betModel.Picks.Add(PickModel.FromEntity(pick));
+                }
+            );
+            
             return betModel;
         }
 

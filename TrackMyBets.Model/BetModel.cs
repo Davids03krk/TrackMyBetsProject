@@ -32,7 +32,7 @@ namespace TrackMyBets.Model
         [Required]
         public BookmakerModel Bookmaker { get; set; }
 
-        public List<PickModel> Picks { get; set }
+        public List<PickModel> Picks { get; set; }
 
         [Required]
         public DateTime DateBet { get; set; }

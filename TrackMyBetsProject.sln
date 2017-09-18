@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Data", "TrackMyBets.Data\TrackMyBets.Data.csproj", "{DEEFC4F3-C833-43A5-BB7D-4E70057411BC}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.WebApi", "TrackMyBets.WebApi\TrackMyBets.WebApi.csproj", "{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TrackMyBets.BBBDD", "TrackMyBets.BBBDD\TrackMyBets.BBBDD.sqlproj", "{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackMyBets.Presentation", "TrackMyBets.Presentation\TrackMyBets.Presentation.csproj", "{4CC613A5-FA20-42B7-B076-724E3650283E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,8 +43,15 @@ Global
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4CC613A5-FA20-42B7-B076-724E3650283E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CC613A5-FA20-42B7-B076-724E3650283E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CC613A5-FA20-42B7-B076-724E3650283E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC613A5-FA20-42B7-B076-724E3650283E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0E26DBC-6EF7-4F0E-B794-2DB4804F1BC5}
 	EndGlobalSection
 EndGlobal

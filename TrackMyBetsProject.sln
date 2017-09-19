@@ -9,11 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Business", "Tra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Model", "TrackMyBets.Model\TrackMyBets.Model.csproj", "{BF312CC0-9D20-48B9-9326-62BD844F36FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.WebApi", "TrackMyBets.WebApi\TrackMyBets.WebApi.csproj", "{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}"
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TrackMyBets.BBBDD", "TrackMyBets.BBBDD\TrackMyBets.BBBDD.sqlproj", "{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackMyBets.Presentation", "TrackMyBets.Presentation\TrackMyBets.Presentation.csproj", "{AC80EF41-4E08-425A-BDA3-AE42549DA805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Presentation", "..\..\..\Downloads\AngularProjectDotnetCore\AngularProjectDotnetCore\TrackMyBets.Presentation.csproj", "{B86C507C-6239-4E09-BC30-274A1C348984}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,20 +31,16 @@ Global
 		{BF312CC0-9D20-48B9-9326-62BD844F36FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF312CC0-9D20-48B9-9326-62BD844F36FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF312CC0-9D20-48B9-9326-62BD844F36FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{037C9409-DFEF-4E0F-8DC9-33BD0C364A3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{AC80EF41-4E08-425A-BDA3-AE42549DA805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC80EF41-4E08-425A-BDA3-AE42549DA805}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC80EF41-4E08-425A-BDA3-AE42549DA805}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC80EF41-4E08-425A-BDA3-AE42549DA805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86C507C-6239-4E09-BC30-274A1C348984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86C507C-6239-4E09-BC30-274A1C348984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86C507C-6239-4E09-BC30-274A1C348984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86C507C-6239-4E09-BC30-274A1C348984}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

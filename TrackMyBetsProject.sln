@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Model", "TrackM
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TrackMyBets.BBBDD", "TrackMyBets.BBBDD\TrackMyBets.BBBDD.sqlproj", "{A4CD5828-942B-4BF3-B70B-3807BEE1F2FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackMyBets.Presentation", "TrackMyBets.Presentation\TrackMyBets.Presentation.csproj", "{354FC354-178F-4CD8-9DCE-4DB20B219605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMyBets.Presentation", "TrackMyBets.Presentation\TrackMyBets.Presentation.csproj", "{354FC354-178F-4CD8-9DCE-4DB20B219605}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackMyBets.WepApi", "TrackMyBets.WepApi\TrackMyBets.WepApi.csproj", "{F859987F-D6C4-4B01-B139-84E9EC95A5A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{354FC354-178F-4CD8-9DCE-4DB20B219605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{354FC354-178F-4CD8-9DCE-4DB20B219605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{354FC354-178F-4CD8-9DCE-4DB20B219605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F859987F-D6C4-4B01-B139-84E9EC95A5A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F859987F-D6C4-4B01-B139-84E9EC95A5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F859987F-D6C4-4B01-B139-84E9EC95A5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F859987F-D6C4-4B01-B139-84E9EC95A5A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

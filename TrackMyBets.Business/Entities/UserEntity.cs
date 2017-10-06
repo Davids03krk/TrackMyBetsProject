@@ -2,6 +2,7 @@
 using System.Linq;
 using TrackMyBets.Data.Models;
 using TrackMyBets.Business.Exceptions;
+using TrackMyBets.Business.Functions;
 
 namespace TrackMyBets.Business.Entities
 {
@@ -19,8 +20,8 @@ namespace TrackMyBets.Business.Entities
         public string SurnameFirst { get; set; }
         public string SurnameSecond { get; set; }
         public string Email { get; set; }
-        public string Telefono { get; set; }
-        public string Direccion { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
         #endregion
 
         #region Constructor
@@ -69,7 +70,14 @@ namespace TrackMyBets.Business.Entities
             if (user.Exist())
                 throw new DuplicatedUserException(user.ToString());
 
+            byte[] passwordHash, passwordSalt;
+            Authentication.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
+            
             var dbUser = user.MapToBD();
+
+            dbUser.PasswordHash = passwordHash;
+            dbUser.PasswordSalt = passwordSalt;
+
             _dbContext.User.Add(dbUser);
             _dbContext.SaveChanges();
 
@@ -85,15 +93,20 @@ namespace TrackMyBets.Business.Entities
 
             if (dbUser == null)
                 throw new NotFoundUserException(IdUser.ToString());
-
+            
             dbUser.Nick = Nick;
-            dbUser.Password = Password;
             dbUser.Name = Name;
             dbUser.SurnameFirst = SurnameFirst;
             dbUser.SurnameSecond = SurnameSecond;
             dbUser.Email = Email;
-            dbUser.Telefono = Telefono;
-            dbUser.Direccion = Direccion;
+            dbUser.Phone = Phone;
+            dbUser.Address = Address;
+            
+            byte[] passwordHash, passwordSalt;
+            Authentication.CreatePasswordHash(Password, out passwordHash, out passwordSalt);
+
+            dbUser.PasswordHash = passwordHash;
+            dbUser.PasswordSalt = passwordSalt;
 
             _dbContext.SaveChanges();
         }
@@ -112,6 +125,24 @@ namespace TrackMyBets.Business.Entities
 
             _dbContext.User.Remove(dbUser);
             _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Method that returns true if the authentication is correct
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool Authenticate()
+        {
+            var dbUser = _dbContext.User.SingleOrDefault(x => x.Nick == Nick);
+
+            if (dbUser == null)
+                return false;
+
+            if (!Authentication.VerifyPasswordHash(Password, dbUser.PasswordHash, dbUser.PasswordSalt))
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -143,13 +174,12 @@ namespace TrackMyBets.Business.Entities
             var dbUser = new User
             {
                 Nick = Nick,
-                Password = Password,
                 Name = Name,
                 SurnameFirst = SurnameFirst,
                 SurnameSecond = SurnameSecond,
                 Email = Email,
-                Telefono = Telefono,
-                Direccion = Direccion
+                Phone = Phone,
+                Address = Address
             };
 
             return dbUser;
@@ -166,13 +196,12 @@ namespace TrackMyBets.Business.Entities
             {
                 IdUser = dbUser.IdUser,
                 Nick = dbUser.Nick,
-                Password = dbUser.Password,
                 Name = dbUser.Name,
                 SurnameFirst = dbUser.SurnameFirst,
                 SurnameSecond = dbUser.SurnameSecond,
                 Email = dbUser.Email,
-                Telefono = dbUser.Telefono,
-                Direccion = dbUser.Direccion
+                Phone = dbUser.Phone,
+                Address = dbUser.Address
             };
 
             return userEntity;

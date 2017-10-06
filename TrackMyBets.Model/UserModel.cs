@@ -35,9 +35,9 @@ namespace TrackMyBets.Model
         [Required]
         public string Email { get; set; }
 
-        public string Telefono { get; set; }
+        public string Phone { get; set; }
 
-        public string Direccion { get; set; }
+        public string Address { get; set; }
         #endregion
 
         #region Public Methods
@@ -52,8 +52,8 @@ namespace TrackMyBets.Model
                 SurnameFirst = user.SurnameFirst,
                 SurnameSecond = user.SurnameSecond,
                 Email = user.Email,
-                Telefono = user.Telefono,
-                Direccion = user.Direccion
+                Phone = user.Phone,
+                Address = user.Address
             };
 
             return userModel;
@@ -70,8 +70,8 @@ namespace TrackMyBets.Model
                 SurnameFirst = SurnameFirst,
                 SurnameSecond = SurnameSecond,
                 Email = Email,
-                Telefono = Telefono,
-                Direccion = Direccion
+                Phone = Phone,
+                Address = Address
             };
 
             return userEntity;

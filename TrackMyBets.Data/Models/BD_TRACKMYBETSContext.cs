@@ -320,7 +320,7 @@ namespace TrackMyBets.Data.Models
 
                 entity.Property(e => e.IdUser).HasColumnName("Id_User");
 
-                entity.Property(e => e.Direccion).HasMaxLength(250);
+                entity.Property(e => e.Address).HasMaxLength(250);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -331,16 +331,16 @@ namespace TrackMyBets.Data.Models
                 entity.Property(e => e.Nick)
                     .IsRequired()
                     .HasMaxLength(100);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
+                
                 entity.Property(e => e.SurnameFirst).HasMaxLength(100);
 
                 entity.Property(e => e.SurnameSecond).HasMaxLength(100);
 
-                entity.Property(e => e.Telefono).HasColumnType("nchar(9)");
+                entity.Property(e => e.Phone).HasColumnType("nchar(9)");
+
+                entity.Property(e => e.PasswordHash).HasColumnType("varbinary(100)");
+
+                entity.Property(e => e.PasswordSalt).HasColumnType("varbinary(100)");
             });
 
             modelBuilder.Entity<Withdrawal>(entity =>

@@ -27,7 +27,9 @@ namespace TrackMyBets.Business.Functions
             [Display(Name = "LOST", Description = "Lost")]
             LOST = 3,
             [Display(Name = "WON", Description = "Won")]
-            WON = 4
+            WON = 4,
+            [Display(Name = "NULO", Description = "Nulo")]
+            NULO = 5
         }
     }
 }

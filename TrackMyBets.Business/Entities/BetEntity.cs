@@ -8,10 +8,6 @@ namespace TrackMyBets.Business.Entities
 {
     public class BetEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdBet { get; set; }
         public int IdRelUserBookmaker { get; set; }
@@ -24,14 +20,7 @@ namespace TrackMyBets.Business.Entities
         public decimal? Benefits { get; set; }
         public int IdStatusType { get; set; }
         #endregion
-
-        #region Constructor
-        public BetEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the bet.
@@ -39,11 +28,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<BetEntity> Load()
         {
-            var bets = new List<BetEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var bets = new List<BetEntity>();
 
-            _dbContext.Bet.ToList().ForEach(x => bets.Add(BetEntity.Load(x.IdBet)));
+                dbContext.Bet.ToList().ForEach(x => bets.Add(BetEntity.Load(x.IdBet)));
 
-            return bets;
+                return bets;
+            }
         }
 
         /// <summary>
@@ -53,12 +45,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static BetEntity Load(int betId)
         {
-            var dbBet = _dbContext.Bet.Find(betId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbBet = dbContext.Bet.Find(betId);
 
-            if (dbBet == null)
-                return null;
+                if (dbBet == null)
+                    return null;
 
-            return MapFromBD(dbBet);
+                return MapFromBD(dbBet);
+            }
         }
 
         /// <summary>
@@ -67,15 +62,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<BetEntity> Load(RelUserBookmakerEntity relUserBookmaker)
         {
-            var bets = new List<BetEntity>();
-
-            _dbContext.Bet.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdRelUserBookmaker == relUserBookmaker.IdRelUserBookmaker)
-                    bets.Add(BetEntity.Load(x.IdBet));
-            });
+                var bets = new List<BetEntity>();
 
-            return bets;
+                dbContext.Bet.ToList().ForEach(x =>
+                {
+                    if (x.IdRelUserBookmaker == relUserBookmaker.IdRelUserBookmaker)
+                        bets.Add(BetEntity.Load(x.IdBet));
+                });
+
+                return bets;
+            }
         }
 
         /// <summary>
@@ -84,12 +82,15 @@ namespace TrackMyBets.Business.Entities
         /// <param name="bet"></param>
         public static void Create(BetEntity bet)
         {
-            var dbBet = bet.MapToBD();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbBet = bet.MapToBD();
 
-            _dbContext.Bet.Add(dbBet);
-            _dbContext.SaveChanges();
+                dbContext.Bet.Add(dbBet);
+                dbContext.SaveChanges();
 
-            bet.IdBet = dbBet.IdBet;
+                bet.IdBet = dbBet.IdBet;
+            }
         }
 
         /// <summary>
@@ -97,22 +98,25 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbBet = _dbContext.Bet.Find(IdBet);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbBet = dbContext.Bet.Find(IdBet);
 
-            if (dbBet == null)
-                throw new NotFoundBetException(IdBet.ToString());
+                if (dbBet == null)
+                    throw new NotFoundBetException(IdBet.ToString());
 
-            dbBet.DateBet = DateBet;
-            dbBet.IsLiveBet = IsLiveBet;
-            dbBet.IsCombinedBet = IsCombinedBet;
-            dbBet.Stake = Stake;
-            dbBet.Quota = Quota;
-            dbBet.Profits = Profits;
-            dbBet.Benefits = Benefits;
-            dbBet.IdRelUserBookmaker = IdRelUserBookmaker;
-            dbBet.IdStatusType = IdStatusType;
+                dbBet.DateBet = DateBet;
+                dbBet.IsLiveBet = IsLiveBet;
+                dbBet.IsCombinedBet = IsCombinedBet;
+                dbBet.Stake = Stake;
+                dbBet.Quota = Quota;
+                dbBet.Profits = Profits;
+                dbBet.Benefits = Benefits;
+                dbBet.IdRelUserBookmaker = IdRelUserBookmaker;
+                dbBet.IdStatusType = IdStatusType;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -120,15 +124,18 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbBet = _dbContext.Bet.Find(IdBet);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbBet = dbContext.Bet.Find(IdBet);
 
-            if (dbBet == null)
-                throw new NotFoundBetException(IdBet.ToString());
+                if (dbBet == null)
+                    throw new NotFoundBetException(IdBet.ToString());
 
-            PickEntity.Load(this).ForEach(x => x.Delete());
+                PickEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.Bet.Remove(dbBet);
-            _dbContext.SaveChanges();
+                dbContext.Bet.Remove(dbBet);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -142,13 +149,16 @@ namespace TrackMyBets.Business.Entities
         #endregion
 
         #region Internal Methods        
-        ///// <summary>
-        ///// Method that returns if the current bet exists in the database.
-        ///// </summary>
-        ///// <returns></returns>
+        /// <summary>
+        /// Method that returns if the current bet exists in the database.
+        /// </summary>
+        /// <returns></returns>
         //internal bool Exist()
         //{
-        //    return _dbContext.Bet.Any(x => x.IdBet == IdBet);
+        //    using (var dbContext = new BD_TRACKMYBETSContext())
+        //    {
+        //        return dbContext.Bet.Any(x => x.IdBet == IdBet);
+        //    }
         //}
 
         /// <summary>
@@ -180,7 +190,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static BetEntity MapFromBD(Bet dbBet)
         {
-            var betEntity = new BetEntity(_dbContext)
+            var betEntity = new BetEntity()
             {
                 IdBet = dbBet.IdBet,
                 DateBet = dbBet.DateBet,

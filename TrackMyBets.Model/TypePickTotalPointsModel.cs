@@ -7,17 +7,6 @@ namespace TrackMyBets.Model
 {
     public class TypePickTotalPointsModel : TypePickModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public TypePickTotalPointsModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
 
         public bool? IsOver { get; set; }
@@ -31,7 +20,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static TypePickTotalPointsModel FromEntity(TypePickTotalPointsEntity typePickTotalPoints)
         {
-            TypePickTotalPointsModel typePickTotalPointsModel = new TypePickTotalPointsModel(_dbContext)
+            TypePickTotalPointsModel typePickTotalPointsModel = new TypePickTotalPointsModel()
             {
                 IdPick = typePickTotalPoints.IdPick,
                 IsOver = typePickTotalPoints.IsOver,
@@ -45,7 +34,7 @@ namespace TrackMyBets.Model
 
         public TypePickTotalPointsEntity ToEntities()
         {
-            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext)
+            var typePickTotalPointsEntity = new TypePickTotalPointsEntity()
             {
                 IdPick = IdPick,
                 IsOver = IsOver,

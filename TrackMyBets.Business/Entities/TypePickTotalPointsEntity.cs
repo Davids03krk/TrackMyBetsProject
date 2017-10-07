@@ -7,24 +7,13 @@ namespace TrackMyBets.Business.Entities
 {
     public class TypePickTotalPointsEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdPick { get; set; }
         public bool? IsOver { get; set; }
         public bool? IsUnder { get; set; }
         public float ValueTotalPoints { get; set; }
         #endregion
-
-        #region Constructor
-        public TypePickTotalPointsEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the pick of type total points.
@@ -32,11 +21,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<TypePickTotalPointsEntity> Load()
         {
-            var typePicksTotalPoints = new List<TypePickTotalPointsEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var typePicksTotalPoints = new List<TypePickTotalPointsEntity>();
 
-            _dbContext.TypePickTotalPoints.ToList().ForEach(x => typePicksTotalPoints.Add(TypePickTotalPointsEntity.Load(x.IdPick)));
+                dbContext.TypePickTotalPoints.ToList().ForEach(x => typePicksTotalPoints.Add(TypePickTotalPointsEntity.Load(x.IdPick)));
 
-            return typePicksTotalPoints;
+                return typePicksTotalPoints;
+            }
         }
 
         /// <summary>
@@ -46,12 +38,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static TypePickTotalPointsEntity Load(int pickId)
         {
-            var dbtypePickTotalPoints = _dbContext.TypePickTotalPoints.Find(pickId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickTotalPoints = dbContext.TypePickTotalPoints.Find(pickId);
 
-            if (dbtypePickTotalPoints == null)
-                return null;
+                if (dbtypePickTotalPoints == null)
+                    return null;
 
-            return MapFromBD(dbtypePickTotalPoints);
+                return MapFromBD(dbtypePickTotalPoints);
+            }
         }
 
         /// <summary>
@@ -60,10 +55,13 @@ namespace TrackMyBets.Business.Entities
         /// <param name="typePicksTotalPoints"></param>
         public static void Create(TypePickTotalPointsEntity typePicksTotalPoints)
         {
-            var dbtypePickTotalPoints = typePicksTotalPoints.MapToBD();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickTotalPoints = typePicksTotalPoints.MapToBD();
 
-            _dbContext.TypePickTotalPoints.Add(dbtypePickTotalPoints);
-            _dbContext.SaveChanges();
+                dbContext.TypePickTotalPoints.Add(dbtypePickTotalPoints);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -71,16 +69,19 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbtypePickTotalPoints = _dbContext.TypePickTotalPoints.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickTotalPoints = dbContext.TypePickTotalPoints.Find(IdPick);
 
-            if (dbtypePickTotalPoints == null)
-                throw new NotFoundPickException(IdPick.ToString());
+                if (dbtypePickTotalPoints == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            dbtypePickTotalPoints.IsOver = IsOver;
-            dbtypePickTotalPoints.IsUnder = IsUnder;
-            dbtypePickTotalPoints.ValueTotalPoints = ValueTotalPoints;
+                dbtypePickTotalPoints.IsOver = IsOver;
+                dbtypePickTotalPoints.IsUnder = IsUnder;
+                dbtypePickTotalPoints.ValueTotalPoints = ValueTotalPoints;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -88,13 +89,16 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbtypePickTotalPoints = _dbContext.TypePickTotalPoints.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickTotalPoints = dbContext.TypePickTotalPoints.Find(IdPick);
 
-            if (dbtypePickTotalPoints == null)
-                throw new NotFoundPickException(IdPick.ToString());
+                if (dbtypePickTotalPoints == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            _dbContext.TypePickTotalPoints.Remove(dbtypePickTotalPoints);
-            _dbContext.SaveChanges();
+                dbContext.TypePickTotalPoints.Remove(dbtypePickTotalPoints);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -107,7 +111,6 @@ namespace TrackMyBets.Business.Entities
         }
         #endregion
 
-
         #region Internal Methods        
         ///// <summary>
         ///// Method that returns if the current pick exists in the database.
@@ -115,8 +118,11 @@ namespace TrackMyBets.Business.Entities
         ///// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.TypePickTotalPoints.Any(x => x.IdPick == IdPick)
-                || _dbContext.TypePickWinner.Any(x => x.IdPick == IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.TypePickTotalPoints.Any(x => x.IdPick == IdPick)
+                || dbContext.TypePickWinner.Any(x => x.IdPick == IdPick);
+            }
         }
 
         /// <summary>
@@ -143,7 +149,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TypePickTotalPointsEntity MapFromBD(TypePickTotalPoints dbTypePickTotalPoints)
         {
-            var typePickTotalPointsEntity = new TypePickTotalPointsEntity(_dbContext)
+            var typePickTotalPointsEntity = new TypePickTotalPointsEntity()
             {
                 IdPick = dbTypePickTotalPoints.IdPick,
                 IsOver = dbTypePickTotalPoints.IsOver,

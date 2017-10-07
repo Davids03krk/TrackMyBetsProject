@@ -8,10 +8,6 @@ namespace TrackMyBets.Business.Entities
 {
     public class UserEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdUser { get; set; }
         public string Nick { get; set; }
@@ -24,26 +20,21 @@ namespace TrackMyBets.Business.Entities
         public string Address { get; set; }
         #endregion
 
-        #region Constructor
-        public UserEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Public Methods
-
         /// <summary>
         /// Method that returns a list with all the user.
         /// </summary>
         /// <returns></returns>
         public static List<UserEntity> Load()
         {
-            var users = new List<UserEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var users = new List<UserEntity>();
 
-            _dbContext.User.ToList().ForEach(x => users.Add(UserEntity.Load(x.IdUser)));
+                dbContext.User.ToList().ForEach(x => users.Add(UserEntity.Load(x.IdUser)));
 
-            return users;
+                return users;
+            }
         }
 
         /// <summary>
@@ -53,12 +44,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static UserEntity Load(int userId)
         {
-            var dbUser = _dbContext.User.Find(userId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbUser = dbContext.User.Find(userId);
 
-            if (dbUser == null)
-                return null;
+                if (dbUser == null)
+                    return null;
 
-            return MapFromBD(dbUser);
+                return MapFromBD(dbUser);
+            }
         }
 
         /// <summary>
@@ -67,21 +61,24 @@ namespace TrackMyBets.Business.Entities
         /// <param name="user"></param>
         public static void Create(UserEntity user)
         {
-            if (user.Exist())
-                throw new DuplicatedUserException(user.ToString());
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                if (user.Exist())
+                    throw new DuplicatedUserException(user.ToString());
 
-            byte[] passwordHash, passwordSalt;
-            Authentication.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
-            
-            var dbUser = user.MapToBD();
+                byte[] passwordHash, passwordSalt;
+                Authentication.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
 
-            dbUser.PasswordHash = passwordHash;
-            dbUser.PasswordSalt = passwordSalt;
+                var dbUser = user.MapToBD();
 
-            _dbContext.User.Add(dbUser);
-            _dbContext.SaveChanges();
+                dbUser.PasswordHash = passwordHash;
+                dbUser.PasswordSalt = passwordSalt;
 
-            user.IdUser = dbUser.IdUser;
+                dbContext.User.Add(dbUser);
+                dbContext.SaveChanges();
+
+                user.IdUser = dbUser.IdUser;
+            }
         }
 
         /// <summary>
@@ -89,26 +86,29 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbUser = _dbContext.User.Find(IdUser);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbUser = dbContext.User.Find(IdUser);
 
-            if (dbUser == null)
-                throw new NotFoundUserException(IdUser.ToString());
-            
-            dbUser.Nick = Nick;
-            dbUser.Name = Name;
-            dbUser.SurnameFirst = SurnameFirst;
-            dbUser.SurnameSecond = SurnameSecond;
-            dbUser.Email = Email;
-            dbUser.Phone = Phone;
-            dbUser.Address = Address;
-            
-            byte[] passwordHash, passwordSalt;
-            Authentication.CreatePasswordHash(Password, out passwordHash, out passwordSalt);
+                if (dbUser == null)
+                    throw new NotFoundUserException(IdUser.ToString());
 
-            dbUser.PasswordHash = passwordHash;
-            dbUser.PasswordSalt = passwordSalt;
+                dbUser.Nick = Nick;
+                dbUser.Name = Name;
+                dbUser.SurnameFirst = SurnameFirst;
+                dbUser.SurnameSecond = SurnameSecond;
+                dbUser.Email = Email;
+                dbUser.Phone = Phone;
+                dbUser.Address = Address;
 
-            _dbContext.SaveChanges();
+                byte[] passwordHash, passwordSalt;
+                Authentication.CreatePasswordHash(Password, out passwordHash, out passwordSalt);
+
+                dbUser.PasswordHash = passwordHash;
+                dbUser.PasswordSalt = passwordSalt;
+
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -116,15 +116,18 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbUser = _dbContext.User.Find(IdUser);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbUser = dbContext.User.Find(IdUser);
 
-            if (dbUser == null)
-                throw new NotFoundUserException(IdUser.ToString());
+                if (dbUser == null)
+                    throw new NotFoundUserException(IdUser.ToString());
 
-            RelUserBookmakerEntity.Load(this).ForEach(x => x.Delete());
+                RelUserBookmakerEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.User.Remove(dbUser);
-            _dbContext.SaveChanges();
+                dbContext.User.Remove(dbUser);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -135,15 +138,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static UserEntity Authenticate(string nickLogin, string passwordLogin)
         {
-            var dbUser = _dbContext.User.SingleOrDefault(x => x.Nick == nickLogin);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbUser = dbContext.User.SingleOrDefault(x => x.Nick == nickLogin);
 
-            if (dbUser == null)
-                return null;
+                if (dbUser == null)
+                    return null;
 
-            if (!Authentication.VerifyPasswordHash(passwordLogin, dbUser.PasswordHash, dbUser.PasswordSalt))
-                return null;
+                if (!Authentication.VerifyPasswordHash(passwordLogin, dbUser.PasswordHash, dbUser.PasswordSalt))
+                    return null;
 
-            return MapFromBD(dbUser);
+                return MapFromBD(dbUser);
+            }
         }
 
         /// <summary>
@@ -163,7 +169,10 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.User.Any(x => x.Nick == Nick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.User.Any(x => x.Nick == Nick);
+            }
         }
 
         /// <summary>
@@ -193,7 +202,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static UserEntity MapFromBD(User dbUser)
         {
-            var userEntity = new UserEntity(_dbContext)
+            var userEntity = new UserEntity()
             {
                 IdUser = dbUser.IdUser,
                 Nick = dbUser.Nick,

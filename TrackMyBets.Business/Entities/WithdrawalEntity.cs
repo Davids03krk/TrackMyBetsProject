@@ -8,23 +8,12 @@ namespace TrackMyBets.Business.Entities
 {
     public class WithdrawalEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdWithdrawal { get; set; }
         public decimal Amount { get; set; }
         public string Comment { get; set; }
         public DateTime DateWithdrawal { get; set; }
         public int IdRelUserBookmaker { get; set; }
-        #endregion
-
-        #region Constructor
-        public WithdrawalEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
         #endregion
 
         #region Public Methods
@@ -34,11 +23,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<WithdrawalEntity> Load()
         {
-            var withdrawals = new List<WithdrawalEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var withdrawals = new List<WithdrawalEntity>();
 
-            _dbContext.Withdrawal.ToList().ForEach(x => withdrawals.Add(WithdrawalEntity.Load(x.IdWithdrawal)));
+                dbContext.Withdrawal.ToList().ForEach(x => withdrawals.Add(WithdrawalEntity.Load(x.IdWithdrawal)));
 
-            return withdrawals;
+                return withdrawals;
+            }
         }
 
         /// <summary>
@@ -48,12 +40,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static WithdrawalEntity Load(int withdrawalId)
         {
-            var dbWithdrawal = _dbContext.Withdrawal.Find(withdrawalId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbWithdrawal = dbContext.Withdrawal.Find(withdrawalId);
 
-            if (dbWithdrawal == null)
-                return null;
+                if (dbWithdrawal == null)
+                    return null;
 
-            return MapFromBD(dbWithdrawal);
+                return MapFromBD(dbWithdrawal);
+            }
         }
 
         /// <summary>
@@ -62,15 +57,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<WithdrawalEntity> Load(RelUserBookmakerEntity relUserBookmaker)
         {
-            var withdrawals = new List<WithdrawalEntity>();
-
-            _dbContext.Withdrawal.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdRelUserBookmaker == relUserBookmaker.IdRelUserBookmaker)
-                    withdrawals.Add(WithdrawalEntity.Load(x.IdWithdrawal));
-            });
+                var withdrawals = new List<WithdrawalEntity>();
 
-            return withdrawals;
+                dbContext.Withdrawal.ToList().ForEach(x =>
+                {
+                    if (x.IdRelUserBookmaker == relUserBookmaker.IdRelUserBookmaker)
+                        withdrawals.Add(WithdrawalEntity.Load(x.IdWithdrawal));
+                });
+
+                return withdrawals;
+            }
         }
 
         /// <summary>
@@ -79,12 +77,15 @@ namespace TrackMyBets.Business.Entities
         /// <param name="withdrawal"></param>
         public static void Create(WithdrawalEntity withdrawal)
         {
-            var dbWithdrawal = withdrawal.MapToBD();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbWithdrawal = withdrawal.MapToBD();
 
-            _dbContext.Withdrawal.Add(dbWithdrawal);
-            _dbContext.SaveChanges();
+                dbContext.Withdrawal.Add(dbWithdrawal);
+                dbContext.SaveChanges();
 
-            withdrawal.IdWithdrawal = dbWithdrawal.IdWithdrawal;
+                withdrawal.IdWithdrawal = dbWithdrawal.IdWithdrawal;
+            }
         }
 
         /// <summary>
@@ -92,17 +93,20 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbWithdrawal = _dbContext.Withdrawal.Find(IdWithdrawal);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbWithdrawal = dbContext.Withdrawal.Find(IdWithdrawal);
 
-            if (dbWithdrawal == null)
-                throw new NotFoundWithdrawalException(IdWithdrawal.ToString());
+                if (dbWithdrawal == null)
+                    throw new NotFoundWithdrawalException(IdWithdrawal.ToString());
 
-            dbWithdrawal.Amount = Amount;
-            dbWithdrawal.Comment = Comment;
-            dbWithdrawal.DateWithdrawal = DateWithdrawal;
-            dbWithdrawal.IdRelUserBookmaker = IdRelUserBookmaker;
+                dbWithdrawal.Amount = Amount;
+                dbWithdrawal.Comment = Comment;
+                dbWithdrawal.DateWithdrawal = DateWithdrawal;
+                dbWithdrawal.IdRelUserBookmaker = IdRelUserBookmaker;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -110,13 +114,16 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbWithdrawal = _dbContext.Withdrawal.Find(IdWithdrawal);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbWithdrawal = dbContext.Withdrawal.Find(IdWithdrawal);
 
-            if (dbWithdrawal == null)
-                throw new NotFoundWithdrawalException(IdWithdrawal.ToString());
+                if (dbWithdrawal == null)
+                    throw new NotFoundWithdrawalException(IdWithdrawal.ToString());
 
-            _dbContext.Withdrawal.Remove(dbWithdrawal);
-            _dbContext.SaveChanges();
+                dbContext.Withdrawal.Remove(dbWithdrawal);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -136,7 +143,10 @@ namespace TrackMyBets.Business.Entities
         ///// <returns></returns>
         //internal bool Exist()
         //{
-        //    return _dbContext.Withdrawal.Any(x => x.IdWithdrawal == IdWithdrawal);
+        //    using (var dbContext = new BD_TRACKMYBETSContext())
+        //    {
+        //        return _dbContext.Withdrawal.Any(x => x.IdWithdrawal == IdWithdrawal);
+        //    }
         //}
 
         /// <summary>
@@ -163,7 +173,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static WithdrawalEntity MapFromBD(Withdrawal dbWithdrawal)
         {
-            var withdrawalEntity = new WithdrawalEntity(_dbContext)
+            var withdrawalEntity = new WithdrawalEntity()
             {
                 IdWithdrawal = dbWithdrawal.IdWithdrawal,
                 Amount = dbWithdrawal.Amount,

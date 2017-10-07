@@ -7,24 +7,13 @@ namespace TrackMyBets.Business.Entities
 {
     public class RelUserBookmakerEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdRelUserBookmaker { get; set; }
         public decimal Bankroll { get; set; }
         public int IdUser { get; set; }
         public int IdBookmaker { get; set; }
         #endregion
-
-        #region Constructor
-        public RelUserBookmakerEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the rels_user_bookmaker.
@@ -32,11 +21,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<RelUserBookmakerEntity> Load()
         {
-            var relsUserBookmaker = new List<RelUserBookmakerEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var relsUserBookmaker = new List<RelUserBookmakerEntity>();
 
-            _dbContext.RelUserBookmaker.ToList().ForEach(x => relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker)));
+                dbContext.RelUserBookmaker.ToList().ForEach(x => relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker)));
 
-            return relsUserBookmaker;
+                return relsUserBookmaker;
+            }
         }
 
         /// <summary>
@@ -46,12 +38,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static RelUserBookmakerEntity Load(int relUserBookmakerId)
         {
-            var dbRelUserBookmaker = _dbContext.RelUserBookmaker.Find(relUserBookmakerId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbRelUserBookmaker = dbContext.RelUserBookmaker.Find(relUserBookmakerId);
 
-            if (dbRelUserBookmaker == null)
-                return null;
+                if (dbRelUserBookmaker == null)
+                    return null;
 
-            return MapFromBD(dbRelUserBookmaker);
+                return MapFromBD(dbRelUserBookmaker);
+            }
         }
 
         /// <summary>
@@ -60,15 +55,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<RelUserBookmakerEntity> Load(UserEntity user)
         {
-            var relsUserBookmaker = new List<RelUserBookmakerEntity>();
-
-            _dbContext.RelUserBookmaker.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdUser == user.IdUser)
-                    relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker));
-            });
+                var relsUserBookmaker = new List<RelUserBookmakerEntity>();
 
-            return relsUserBookmaker;
+                dbContext.RelUserBookmaker.ToList().ForEach(x =>
+                {
+                    if (x.IdUser == user.IdUser)
+                        relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker));
+                });
+
+                return relsUserBookmaker;
+            }
         }
 
         /// <summary>
@@ -77,15 +75,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<RelUserBookmakerEntity> Load(BookmakerEntity bookmaker)
         {
-            var relsUserBookmaker = new List<RelUserBookmakerEntity>();
-
-            _dbContext.RelUserBookmaker.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdBookmaker == bookmaker.IdBookmaker)
-                    relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker));
-            });
+                var relsUserBookmaker = new List<RelUserBookmakerEntity>();
 
-            return relsUserBookmaker;
+                dbContext.RelUserBookmaker.ToList().ForEach(x =>
+                {
+                    if (x.IdBookmaker == bookmaker.IdBookmaker)
+                        relsUserBookmaker.Add(RelUserBookmakerEntity.Load(x.IdRelUserBookmaker));
+                });
+
+                return relsUserBookmaker;
+            }
         }
 
         /// <summary>
@@ -94,14 +95,17 @@ namespace TrackMyBets.Business.Entities
         /// <param name="relUserBookmaker"></param>
         public static void Create(RelUserBookmakerEntity relUserBookmaker)
         {
-            if (relUserBookmaker.Exist())
-                throw new DuplicatedRelUserBookmakerException(relUserBookmaker.ToString());
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                if (relUserBookmaker.Exist())
+                    throw new DuplicatedRelUserBookmakerException(relUserBookmaker.ToString());
 
-            var dbRelUserBookmaker = relUserBookmaker.MapToBD();
-            _dbContext.RelUserBookmaker.Add(dbRelUserBookmaker);
-            _dbContext.SaveChanges();
+                var dbRelUserBookmaker = relUserBookmaker.MapToBD();
+                dbContext.RelUserBookmaker.Add(dbRelUserBookmaker);
+                dbContext.SaveChanges();
 
-            relUserBookmaker.IdRelUserBookmaker = dbRelUserBookmaker.IdRelUserBookmaker;
+                relUserBookmaker.IdRelUserBookmaker = dbRelUserBookmaker.IdRelUserBookmaker;
+            }
         }
 
         /// <summary>
@@ -109,16 +113,19 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbRelUserBookmaker = _dbContext.RelUserBookmaker.Find(IdRelUserBookmaker);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbRelUserBookmaker = dbContext.RelUserBookmaker.Find(IdRelUserBookmaker);
 
-            if (dbRelUserBookmaker == null)
-                throw new NotFoundRelUserBookmakerException(IdRelUserBookmaker.ToString());
+                if (dbRelUserBookmaker == null)
+                    throw new NotFoundRelUserBookmakerException(IdRelUserBookmaker.ToString());
 
-            dbRelUserBookmaker.Bankroll = Bankroll;
-            dbRelUserBookmaker.IdUser = IdUser;
-            dbRelUserBookmaker.IdBookmaker = IdBookmaker;
+                dbRelUserBookmaker.Bankroll = Bankroll;
+                dbRelUserBookmaker.IdUser = IdUser;
+                dbRelUserBookmaker.IdBookmaker = IdBookmaker;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -126,17 +133,20 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbRelUserBookmaker = _dbContext.RelUserBookmaker.Find(IdRelUserBookmaker);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbRelUserBookmaker = dbContext.RelUserBookmaker.Find(IdRelUserBookmaker);
 
-            if (dbRelUserBookmaker == null)
-                throw new NotFoundRelUserBookmakerException(IdRelUserBookmaker.ToString());
+                if (dbRelUserBookmaker == null)
+                    throw new NotFoundRelUserBookmakerException(IdRelUserBookmaker.ToString());
 
-            BetEntity.Load(this).ForEach(x => x.Delete());
-            IncomeEntity.Load(this).ForEach(x => x.Delete());
-            WithdrawalEntity.Load(this).ForEach(x => x.Delete());
+                BetEntity.Load(this).ForEach(x => x.Delete());
+                IncomeEntity.Load(this).ForEach(x => x.Delete());
+                WithdrawalEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.RelUserBookmaker.Remove(dbRelUserBookmaker);
-            _dbContext.SaveChanges();
+                dbContext.RelUserBookmaker.Remove(dbRelUserBookmaker);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -156,7 +166,10 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.RelUserBookmaker.Any(x => x.IdUser == IdUser && x.IdBookmaker == IdBookmaker);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.RelUserBookmaker.Any(x => x.IdUser == IdUser && x.IdBookmaker == IdBookmaker);
+            }
         }
 
         /// <summary>
@@ -182,7 +195,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static RelUserBookmakerEntity MapFromBD(RelUserBookmaker dbRelUserBookmaker)
         {
-            var relUserBookmakerEntity = new RelUserBookmakerEntity(_dbContext)
+            var relUserBookmakerEntity = new RelUserBookmakerEntity()
             {
                 IdRelUserBookmaker = dbRelUserBookmaker.IdRelUserBookmaker,
                 Bankroll = dbRelUserBookmaker.Bankroll,

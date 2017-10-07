@@ -7,10 +7,6 @@ namespace TrackMyBets.Business.Entities
 {
     public class TeamEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdTeam { get; set; }
         public string DescTeam { get; set; }
@@ -20,14 +16,7 @@ namespace TrackMyBets.Business.Entities
         public string Abbreviation { get; set; }
         public int IdSport { get; set; }
         #endregion
-
-        #region Constructor
-        public TeamEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
 
         /// <summary>
@@ -36,11 +25,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<TeamEntity> Load()
         {
-            var teams = new List<TeamEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var teams = new List<TeamEntity>();
 
-            _dbContext.Team.ToList().ForEach(x => teams.Add(TeamEntity.Load(x.IdTeam)));
+                dbContext.Team.ToList().ForEach(x => teams.Add(TeamEntity.Load(x.IdTeam)));
 
-            return teams;
+                return teams;
+            }
         }
 
         /// <summary>
@@ -50,12 +42,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static TeamEntity Load(int teamId)
         {
-            var dbTeam = _dbContext.Team.Find(teamId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbTeam = dbContext.Team.Find(teamId);
 
-            if (dbTeam == null)
-                return null;
+                if (dbTeam == null)
+                    return null;
 
-            return MapFromBD(dbTeam);
+                return MapFromBD(dbTeam);
+            }
         }
 
         /// <summary>
@@ -64,15 +59,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<TeamEntity> Load(SportEntity sport)
         {
-            var teams = new List<TeamEntity>();
-
-            _dbContext.Team.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdSport == sport.IdSport)
-                    teams.Add(TeamEntity.Load(x.IdTeam));
-            });
+                var teams = new List<TeamEntity>();
 
-            return teams;
+                dbContext.Team.ToList().ForEach(x =>
+                {
+                    if (x.IdSport == sport.IdSport)
+                        teams.Add(TeamEntity.Load(x.IdTeam));
+                });
+
+                return teams;
+            }
         }
 
         /// <summary>
@@ -81,14 +79,17 @@ namespace TrackMyBets.Business.Entities
         /// <param name="team"></param>
         public static void Create(TeamEntity team)
         {
-            if (team.Exist())
-                throw new DuplicatedTeamException(team.ToString());
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                if (team.Exist())
+                    throw new DuplicatedTeamException(team.ToString());
 
-            var dbTeam = team.MapToBD();
-            _dbContext.Team.Add(dbTeam);
-            _dbContext.SaveChanges();
+                var dbTeam = team.MapToBD();
+                dbContext.Team.Add(dbTeam);
+                dbContext.SaveChanges();
 
-            team.IdTeam = dbTeam.IdTeam;
+                team.IdTeam = dbTeam.IdTeam;
+            }
         }
 
         /// <summary>
@@ -96,18 +97,21 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbTeam = _dbContext.Team.Find(IdTeam);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbTeam = dbContext.Team.Find(IdTeam);
 
-            if (dbTeam == null)
-                throw new NotFoundTeamException(IdTeam.ToString());
+                if (dbTeam == null)
+                    throw new NotFoundTeamException(IdTeam.ToString());
 
-            dbTeam.DescTeam = DescTeam;
-            dbTeam.Name = Name;
-            dbTeam.City = City;
-            dbTeam.Stadium = Stadium;
-            dbTeam.IdSport = IdSport;
+                dbTeam.DescTeam = DescTeam;
+                dbTeam.Name = Name;
+                dbTeam.City = City;
+                dbTeam.Stadium = Stadium;
+                dbTeam.IdSport = IdSport;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -115,15 +119,18 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbTeam = _dbContext.Team.Find(IdTeam);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbTeam = dbContext.Team.Find(IdTeam);
 
-            if (dbTeam == null)
-                throw new NotFoundTeamException(IdTeam.ToString());
+                if (dbTeam == null)
+                    throw new NotFoundTeamException(IdTeam.ToString());
 
-            EventEntity.Load(this).ForEach(x => x.Delete());
+                EventEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.Team.Remove(dbTeam);
-            _dbContext.SaveChanges();
+                dbContext.Team.Remove(dbTeam);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -143,7 +150,10 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.Team.Any(x => x.DescTeam == DescTeam);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.Team.Any(x => x.DescTeam == DescTeam);
+            }
         }
 
         /// <summary>
@@ -171,7 +181,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TeamEntity MapFromBD(Team dbTeam)
         {
-            var teamEntity = new TeamEntity(_dbContext)
+            var teamEntity = new TeamEntity()
             {
                 IdTeam = dbTeam.IdTeam,
                 DescTeam = dbTeam.DescTeam,

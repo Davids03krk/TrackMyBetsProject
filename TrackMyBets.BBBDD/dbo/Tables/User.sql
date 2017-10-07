@@ -8,8 +8,11 @@
     [Address]       NVARCHAR (250)  NULL,
     [PasswordHash]  VARBINARY (100) NULL,
     [PasswordSalt]  VARBINARY (100) NULL,
+    [Email]         NVARCHAR (150)  NULL,
     CONSTRAINT [PK_User_IdUser] PRIMARY KEY CLUSTERED ([Id_User] ASC)
 );
+
+
 
 
 

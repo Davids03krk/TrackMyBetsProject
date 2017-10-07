@@ -7,17 +7,6 @@ namespace TrackMyBets.Model
 {
     public class TypePickWinnerModel : TypePickModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public TypePickWinnerModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public bool? HasHandicap { get; set; }
 
@@ -30,7 +19,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static TypePickWinnerModel FromEntity(TypePickWinnerEntity typePickWinner)
         {
-            TypePickWinnerModel typePickWinnerModel = new TypePickWinnerModel(_dbContext)
+            TypePickWinnerModel typePickWinnerModel = new TypePickWinnerModel()
             {
                 IdPick = typePickWinner.IdPick,
                 HasHandicap = typePickWinner.HasHandicap,
@@ -44,7 +33,7 @@ namespace TrackMyBets.Model
 
         public TypePickWinnerEntity ToEntities()
         {
-            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext)
+            var typePickWinnerEntity = new TypePickWinnerEntity()
             {
                 IdPick = IdPick,
                 HasHandicap = HasHandicap,

@@ -6,17 +6,6 @@ namespace TrackMyBets.Model
 {
     public class UserModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public UserModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdUser { get; set; }
 
@@ -43,7 +32,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static UserModel FromEntity(UserEntity user)
         {
-            UserModel userModel = new UserModel(_dbContext)
+            UserModel userModel = new UserModel()
             {
                 IdUser = user.IdUser,
                 Nick = user.Nick,
@@ -61,7 +50,7 @@ namespace TrackMyBets.Model
 
         public UserEntity ToEntities()
         {
-            var userEntity = new UserEntity(_dbContext)
+            var userEntity = new UserEntity()
             {
                 IdUser = IdUser,
                 Nick = Nick,

@@ -7,24 +7,13 @@ namespace TrackMyBets.Business.Entities
 {
     public class TypePickWinnerEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdPick { get; set; }
         public bool? HasHandicap { get; set; }
         public float? ValueHandicap { get; set; }
         public int IdWinnerTeam { get; set; }
         #endregion
-
-        #region Constructor
-        public TypePickWinnerEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the pick of type winner.
@@ -32,11 +21,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<TypePickWinnerEntity> Load()
         {
-            var typePicksWinner = new List<TypePickWinnerEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var typePicksWinner = new List<TypePickWinnerEntity>();
 
-            _dbContext.TypePickWinner.ToList().ForEach(x => typePicksWinner.Add(TypePickWinnerEntity.Load(x.IdPick)));
+                dbContext.TypePickWinner.ToList().ForEach(x => typePicksWinner.Add(TypePickWinnerEntity.Load(x.IdPick)));
 
-            return typePicksWinner;
+                return typePicksWinner;
+            }
         }
 
         /// <summary>
@@ -46,12 +38,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static TypePickWinnerEntity Load(int pickId)
         {
-            var dbTypePickWinner = _dbContext.TypePickWinner.Find(pickId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbTypePickWinner = dbContext.TypePickWinner.Find(pickId);
 
-            if (dbTypePickWinner == null)
-                return null;
+                if (dbTypePickWinner == null)
+                    return null;
 
-            return MapFromBD(dbTypePickWinner);
+                return MapFromBD(dbTypePickWinner);
+            }
         }
 
         /// <summary>
@@ -60,10 +55,13 @@ namespace TrackMyBets.Business.Entities
         /// <param name="typePickWinner"></param>
         public static void Create(TypePickWinnerEntity typePickWinner)
         {
-            var dbtypePickWinner = typePickWinner.MapToBD();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickWinner = typePickWinner.MapToBD();
 
-            _dbContext.TypePickWinner.Add(dbtypePickWinner);
-            _dbContext.SaveChanges();
+                dbContext.TypePickWinner.Add(dbtypePickWinner);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -71,16 +69,19 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbtypePickWinner = _dbContext.TypePickWinner.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickWinner = dbContext.TypePickWinner.Find(IdPick);
 
-            if (dbtypePickWinner == null)
-                throw new NotFoundPickException(IdPick.ToString());
+                if (dbtypePickWinner == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            dbtypePickWinner.HasHandicap = HasHandicap;
-            dbtypePickWinner.ValueHandicap = ValueHandicap;
-            dbtypePickWinner.IdWinnerTeam = IdWinnerTeam;
+                dbtypePickWinner.HasHandicap = HasHandicap;
+                dbtypePickWinner.ValueHandicap = ValueHandicap;
+                dbtypePickWinner.IdWinnerTeam = IdWinnerTeam;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -88,13 +89,16 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbtypePickWinner = _dbContext.TypePickWinner.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbtypePickWinner = dbContext.TypePickWinner.Find(IdPick);
 
-            if (dbtypePickWinner == null)
-                throw new NotFoundPickException(IdPick.ToString());
+                if (dbtypePickWinner == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            _dbContext.TypePickWinner.Remove(dbtypePickWinner);
-            _dbContext.SaveChanges();
+                dbContext.TypePickWinner.Remove(dbtypePickWinner);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -115,8 +119,11 @@ namespace TrackMyBets.Business.Entities
         ///// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.TypePickTotalPoints.Any(x => x.IdPick == IdPick) 
-                || _dbContext.TypePickWinner.Any(x => x.IdPick == IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.TypePickTotalPoints.Any(x => x.IdPick == IdPick)
+                || dbContext.TypePickWinner.Any(x => x.IdPick == IdPick);
+            }
         }
 
         /// <summary>
@@ -143,7 +150,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static TypePickWinnerEntity MapFromBD(TypePickWinner dbTypePickWinner)
         {
-            var typePickWinnerEntity = new TypePickWinnerEntity(_dbContext)
+            var typePickWinnerEntity = new TypePickWinnerEntity()
             {
                 IdPick = dbTypePickWinner.IdPick,
                 HasHandicap = dbTypePickWinner.HasHandicap,

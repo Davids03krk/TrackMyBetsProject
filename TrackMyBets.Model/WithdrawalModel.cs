@@ -7,17 +7,6 @@ namespace TrackMyBets.Model
 {
     public class WithdrawalModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public WithdrawalModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdWithdrawal { get; set; }
 
@@ -44,7 +33,7 @@ namespace TrackMyBets.Model
         {
             RelUserBookmakerEntity relUserBookmakerEntity = RelUserBookmakerEntity.Load(withdrawal.IdRelUserBookmaker);
 
-            WithdrawalModel withdrawalModel = new WithdrawalModel(_dbContext)
+            WithdrawalModel withdrawalModel = new WithdrawalModel()
             {
                 IdWithdrawal = withdrawal.IdWithdrawal,
                 Amount = withdrawal.Amount,
@@ -60,7 +49,7 @@ namespace TrackMyBets.Model
 
         public WithdrawalEntity ToEntities()
         {
-            var withdrawalEntity = new WithdrawalEntity(_dbContext)
+            var withdrawalEntity = new WithdrawalEntity()
             {
                 IdWithdrawal = IdWithdrawal,
                 Amount = Amount,

@@ -8,17 +8,6 @@ namespace TrackMyBets.Model
 {
     public class PickModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public PickModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdPick { get; set; }
 
@@ -38,7 +27,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static PickModel FromEntity(PickEntity pick)
         {
-            PickModel pickModel = new PickModel(_dbContext)
+            PickModel pickModel = new PickModel()
             {
                 IdPick = pick.IdPick,
                 Bet = BetModel.FromEntity(BetEntity.Load(pick.IdBet)),
@@ -53,7 +42,7 @@ namespace TrackMyBets.Model
 
         public PickEntity ToEntities()
         {
-            var pickEntity = new PickEntity(_dbContext)
+            var pickEntity = new PickEntity()
             {
                 IdPick = IdPick,
                 IdBet = Bet.IdBet,

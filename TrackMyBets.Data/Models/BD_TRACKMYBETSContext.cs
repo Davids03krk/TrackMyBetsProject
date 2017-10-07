@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using TrackMyBets.Data.Configurations;
 
 namespace TrackMyBets.Data.Models
 {
@@ -20,9 +21,9 @@ namespace TrackMyBets.Data.Models
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Withdrawal> Withdrawal { get; set; }
 
-        public BD_TRACKMYBETSContext(DbContextOptions<BD_TRACKMYBETSContext> options) 
-            : base(options) {
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(Settings.ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

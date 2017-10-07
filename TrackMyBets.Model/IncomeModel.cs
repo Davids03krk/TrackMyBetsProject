@@ -7,17 +7,6 @@ namespace TrackMyBets.Model
 {
     public class IncomeModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public IncomeModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdIncome { get; set; }
 
@@ -46,7 +35,7 @@ namespace TrackMyBets.Model
         {
             RelUserBookmakerEntity relUserBookmakerEntity = RelUserBookmakerEntity.Load(income.IdRelUserBookmaker);
 
-            IncomeModel incomeModel = new IncomeModel(_dbContext)
+            IncomeModel incomeModel = new IncomeModel()
             {
                 IdIncome = income.IdIncome,
                 Amount = income.Amount,
@@ -63,7 +52,7 @@ namespace TrackMyBets.Model
 
         public IncomeEntity ToEntities()
         {
-            var incomeEntity = new IncomeEntity(_dbContext)
+            var incomeEntity = new IncomeEntity()
             {
                 IdIncome = IdIncome,
                 Amount = Amount,

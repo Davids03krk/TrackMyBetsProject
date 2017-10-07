@@ -7,17 +7,6 @@ namespace TrackMyBets.Model
 {
     public class EventModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public EventModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdEvent { get; set; }
 
@@ -38,7 +27,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static EventModel FromEntity(EventEntity evento)
         {
-            EventModel eventModel = new EventModel(_dbContext)
+            EventModel eventModel = new EventModel()
             {
                 IdEvent = evento.IdEvent,
                 Comment = evento.Comment,
@@ -53,7 +42,7 @@ namespace TrackMyBets.Model
 
         public EventEntity ToEntities()
         {
-            var eventEntity = new EventEntity(_dbContext)
+            var eventEntity = new EventEntity()
             {
                 IdEvent = IdEvent,
                 Comment = Comment,

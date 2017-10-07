@@ -6,17 +6,6 @@ namespace TrackMyBets.Model
 {
     public class SportModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public SportModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdSport { get; set; }
 
@@ -29,7 +18,7 @@ namespace TrackMyBets.Model
         #region Public Methods
         public static SportModel FromEntity(SportEntity sport)
         {
-            SportModel sportModel = new SportModel(_dbContext)
+            SportModel sportModel = new SportModel()
             {
                 IdSport = sport.IdSport,
                 DescSport = sport.DescSport,
@@ -41,7 +30,7 @@ namespace TrackMyBets.Model
 
         public SportEntity ToEntities()
         {
-            var sportEntity = new SportEntity(_dbContext)
+            var sportEntity = new SportEntity()
             {
                 IdSport = IdSport,
                 DescSport = DescSport,

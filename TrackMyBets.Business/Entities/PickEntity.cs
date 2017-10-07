@@ -7,24 +7,13 @@ namespace TrackMyBets.Business.Entities
 {
     public class PickEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdPick { get; set; }
         public int IdBet { get; set; }
         public int IdEvent { get; set; }
         public int IdPickType { get; set; }
         #endregion
-
-        #region Constructor
-        public PickEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the pick.
@@ -32,11 +21,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<PickEntity> Load()
         {
-            var picks = new List<PickEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var picks = new List<PickEntity>();
 
-            _dbContext.Pick.ToList().ForEach(x => picks.Add(PickEntity.Load(x.IdPick)));
+                dbContext.Pick.ToList().ForEach(x => picks.Add(PickEntity.Load(x.IdPick)));
 
-            return picks;
+                return picks;
+            }
         }
 
         /// <summary>
@@ -46,12 +38,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static PickEntity Load(int pickId)
         {
-            var dbPick = _dbContext.Pick.Find(pickId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbPick = dbContext.Pick.Find(pickId);
 
-            if (dbPick == null)
-                return null;
+                if (dbPick == null)
+                    return null;
 
-            return MapFromBD(dbPick);
+                return MapFromBD(dbPick);
+            }
         }
 
         /// <summary>
@@ -60,15 +55,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<PickEntity> Load(EventEntity evento)
         {
-            var picks = new List<PickEntity>();
-
-            _dbContext.Pick.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdEvent == evento.IdEvent)
-                    picks.Add(PickEntity.Load(x.IdPick));
-            });
+                var picks = new List<PickEntity>();
 
-            return picks;
+                dbContext.Pick.ToList().ForEach(x =>
+                {
+                    if (x.IdEvent == evento.IdEvent)
+                        picks.Add(PickEntity.Load(x.IdPick));
+                });
+
+                return picks;
+            }
         }
 
         /// <summary>
@@ -77,15 +75,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<PickEntity> Load(BetEntity bet)
         {
-            var picks = new List<PickEntity>();
-
-            _dbContext.Pick.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdBet == bet.IdBet)
-                    picks.Add(PickEntity.Load(x.IdPick));
-            });
+                var picks = new List<PickEntity>();
 
-            return picks;
+                dbContext.Pick.ToList().ForEach(x =>
+                {
+                    if (x.IdBet == bet.IdBet)
+                        picks.Add(PickEntity.Load(x.IdPick));
+                });
+
+                return picks;
+            }
         }
 
         /// <summary>
@@ -94,12 +95,15 @@ namespace TrackMyBets.Business.Entities
         /// <param name="pick"></param>
         public static void Create(PickEntity pick)
         {
-            var dbPick = pick.MapToBD();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbPick = pick.MapToBD();
 
-            _dbContext.Pick.Add(dbPick);
-            _dbContext.SaveChanges();
+                dbContext.Pick.Add(dbPick);
+                dbContext.SaveChanges();
 
-            pick.IdPick = dbPick.IdPick;
+                pick.IdPick = dbPick.IdPick;
+            }
         }
 
         /// <summary>
@@ -107,16 +111,19 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbPick = _dbContext.Pick.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbPick = dbContext.Pick.Find(IdPick);
 
-            if (dbPick == null)
-                throw new NotFoundPickException(IdPick.ToString());
+                if (dbPick == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            dbPick.IdBet = IdBet;
-            dbPick.IdEvent = IdEvent;
-            dbPick.IdPickType = IdPickType;
+                dbPick.IdBet = IdBet;
+                dbPick.IdEvent = IdEvent;
+                dbPick.IdPickType = IdPickType;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -124,16 +131,19 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbPick = _dbContext.Pick.Find(IdPick);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbPick = dbContext.Pick.Find(IdPick);
 
-            if (dbPick == null)
-                throw new NotFoundPickException(IdPick.ToString());
-            
-            TypePickTotalPointsEntity.Load(IdPick).Delete();
-            TypePickWinnerEntity.Load(IdPick).Delete();
+                if (dbPick == null)
+                    throw new NotFoundPickException(IdPick.ToString());
 
-            _dbContext.Pick.Remove(dbPick);
-            _dbContext.SaveChanges();
+                TypePickTotalPointsEntity.Load(IdPick).Delete();
+                TypePickWinnerEntity.Load(IdPick).Delete();
+
+                dbContext.Pick.Remove(dbPick);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -147,13 +157,16 @@ namespace TrackMyBets.Business.Entities
         #endregion
 
         #region Internal Methods        
-        ///// <summary>
-        ///// Method that returns if the current pick exists in the database.
-        ///// </summary>
-        ///// <returns></returns>
+        /// <summary>
+        /// Method that returns if the current pick exists in the database.
+        /// </summary>
+        /// <returns></returns>
         //internal bool Exist()
         //{
-        //    return _dbContext.Pick.Any(x => x.IdPick == IdPick);
+        //    using (var dbContext = new BD_TRACKMYBETSContext())
+        //    {
+        //        return dbContext.Pick.Any(x => x.IdPick == IdPick);
+        //    }
         //}
 
         /// <summary>
@@ -179,7 +192,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static PickEntity MapFromBD(Pick dbPick)
         {
-            var pickEntity = new PickEntity(_dbContext)
+            var pickEntity = new PickEntity()
             {
                 IdPick = dbPick.IdPick,
                 IdBet = dbPick.IdBet,

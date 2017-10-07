@@ -1,8 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using TrackMyBets.Data.Models;
-using TrackMyBets.WepApi.Helpers;
-using Microsoft.Extensions.Options;
 using TrackMyBets.Model;
 using TrackMyBets.Business.Entities;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,6 +7,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using TrackMyBets.Business.Configurations;
 
 namespace TrackMyBets.WepApi.Controllers
 {
@@ -17,17 +15,6 @@ namespace TrackMyBets.WepApi.Controllers
     [Route("api/User")]
     public class UserController : Controller
     {
-        private static BD_TRACKMYBETSContext _dbContext;
-        private readonly AppSettings _appSettings;
-
-        public UserController(
-            IOptions<AppSettings> appSettings,
-            BD_TRACKMYBETSContext dbContext) {
-
-            _appSettings = appSettings.Value;
-            _dbContext = dbContext;
-        }
-
         [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLogin userLogin) {
@@ -38,7 +25,7 @@ namespace TrackMyBets.WepApi.Controllers
                 return Unauthorized();
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Settings.SecretAuth);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

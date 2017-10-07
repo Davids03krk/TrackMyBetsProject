@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TrackMyBets.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using TrackMyBets.WepApi.Helpers;
+using TrackMyBets.Business.Configurations;
 using Microsoft.Extensions.Options;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -30,11 +30,7 @@ namespace TrackMyBets.WepApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddMvc();
-            
-            services.AddDbContext<BD_TRACKMYBETSContext>(options => options.UseSqlServer(AppSettings.ConnetionString));
-
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddMvc();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,8 +45,7 @@ namespace TrackMyBets.WepApi
                 .AllowAnyHeader()
                 .AllowCredentials());
 
-            var appSettings = app.ApplicationServices.GetService<IOptions<AppSettings>>().Value;
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Settings.SecretAuth);
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,

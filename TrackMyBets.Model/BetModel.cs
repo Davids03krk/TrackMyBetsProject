@@ -9,17 +9,6 @@ namespace TrackMyBets.Model
 {
     public class BetModel
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
-        #region Constructor
-        public BetModel(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
         #region Properties
         public int IdBet { get; set; }
 
@@ -60,7 +49,7 @@ namespace TrackMyBets.Model
         {
             RelUserBookmakerEntity relUserBookmakerEntity = RelUserBookmakerEntity.Load(bet.IdRelUserBookmaker);
 
-            BetModel betModel = new BetModel(_dbContext)
+            BetModel betModel = new BetModel()
             {
                 IdBet = bet.IdBet,
                 RelUserBookmaker = bet.IdRelUserBookmaker,
@@ -86,7 +75,7 @@ namespace TrackMyBets.Model
 
         public BetEntity ToEntities()
         {
-            var betEntity = new BetEntity(_dbContext)
+            var betEntity = new BetEntity()
             {
                 IdBet = IdBet,
                 IdRelUserBookmaker = RelUserBookmaker,

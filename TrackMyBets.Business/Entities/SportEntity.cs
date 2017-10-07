@@ -7,22 +7,12 @@ namespace TrackMyBets.Business.Entities
 {
     public class SportEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdSport { get; set; }
         public string DescSport { get; set; }
         public float? DurationMatchInHours { get; set; }
         #endregion
-
-        #region Constructor
-        public SportEntity(BD_TRACKMYBETSContext dbCOntext) {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
 
         /// <summary>
@@ -31,11 +21,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<SportEntity> Load()
         {
-            var sports = new List<SportEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var sports = new List<SportEntity>();
 
-            _dbContext.Sport.ToList().ForEach(x => sports.Add(SportEntity.Load(x.IdSport)));
+                dbContext.Sport.ToList().ForEach(x => sports.Add(SportEntity.Load(x.IdSport)));
 
-            return sports;
+                return sports;
+            }
         }
 
         /// <summary>
@@ -43,66 +36,83 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         /// <param name="sportId"></param>
         /// <returns></returns>
-        public static SportEntity Load(int sportId) {
-            var dbSport = _dbContext.Sport.Find(sportId);
+        public static SportEntity Load(int sportId)
+        {
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbSport = dbContext.Sport.Find(sportId);
 
-            if (dbSport == null)
-                return null;
+                if (dbSport == null)
+                    return null;
 
-            return MapFromBD(dbSport);
+                return MapFromBD(dbSport);
+            }
         }
 
         /// <summary>
         /// Method that adds to the database the past sport as a parameter.
         /// </summary>
         /// <param name="sport"></param>
-        public static void Create(SportEntity sport) {
-            if (sport.Exist())
-                throw new DuplicatedSportException(sport.ToString());
-            
-            var dbSport = sport.MapToBD();
-            _dbContext.Sport.Add(dbSport);
-            _dbContext.SaveChanges();
+        public static void Create(SportEntity sport)
+        {
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                if (sport.Exist())
+                    throw new DuplicatedSportException(sport.ToString());
 
-            sport.IdSport = dbSport.IdSport;
+                var dbSport = sport.MapToBD();
+                dbContext.Sport.Add(dbSport);
+                dbContext.SaveChanges();
+
+                sport.IdSport = dbSport.IdSport;
+            }
         }
 
         /// <summary>
         /// Method that updates the current sport database.
         /// </summary>
-        public void Update() {
-            var dbSport = _dbContext.Sport.Find(IdSport);
+        public void Update()
+        {
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbSport = dbContext.Sport.Find(IdSport);
 
-            if (dbSport == null)
-                throw new NotFoundSportException(IdSport.ToString());
+                if (dbSport == null)
+                    throw new NotFoundSportException(IdSport.ToString());
 
-            dbSport.DescSport = DescSport;
-            dbSport.DurationMatchInHours = DurationMatchInHours;
+                dbSport.DescSport = DescSport;
+                dbSport.DurationMatchInHours = DurationMatchInHours;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
         /// Method that removes of database the current sport.
         /// </summary>
-        public void Delete() {
-            var dbSport = _dbContext.Sport.Find(IdSport);
+        public void Delete()
+        {
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbSport = dbContext.Sport.Find(IdSport);
 
-            if (dbSport == null)
-                throw new NotFoundSportException(IdSport.ToString());
+                if (dbSport == null)
+                    throw new NotFoundSportException(IdSport.ToString());
 
-            TeamEntity.Load(this).ForEach(x => x.Delete());
-            EventEntity.Load(this).ForEach(x => x.Delete());
+                TeamEntity.Load(this).ForEach(x => x.Delete());
+                EventEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.Sport.Remove(dbSport);
-            _dbContext.SaveChanges();
+                dbContext.Sport.Remove(dbSport);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
         /// Method that returns the current sport as a string.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("Sport[ {0} ]", DescSport);
         }
         #endregion
@@ -112,15 +122,20 @@ namespace TrackMyBets.Business.Entities
         /// Method that returns if the current sport exists in the database.
         /// </summary>
         /// <returns></returns>
-        internal bool Exist() {
-            return _dbContext.Sport.Any(x => x.DescSport == DescSport);
+        internal bool Exist()
+        {
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.Sport.Any(x => x.DescSport == DescSport);
+            }
         }
 
         /// <summary>
         /// Method that maps a sport to the database model.
         /// </summary>
         /// <returns></returns>
-        internal Sport MapToBD() {
+        internal Sport MapToBD()
+        {
             var dbSport = new Sport
             {
                 DescSport = DescSport,
@@ -135,8 +150,9 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         /// <param name="dbSport"></param>
         /// <returns></returns>
-        internal static SportEntity MapFromBD(Sport dbSport) {
-            var sportEntity = new SportEntity(_dbContext)
+        internal static SportEntity MapFromBD(Sport dbSport)
+        {
+            var sportEntity = new SportEntity()
             {
                 IdSport = dbSport.IdSport,
                 DescSport = dbSport.DescSport,

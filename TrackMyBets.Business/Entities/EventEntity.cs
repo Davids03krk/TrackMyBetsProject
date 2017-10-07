@@ -8,10 +8,6 @@ namespace TrackMyBets.Business.Entities
 {
     public class EventEntity
     {
-        #region DBContext
-        private static BD_TRACKMYBETSContext _dbContext;
-        #endregion
-
         #region Attributes
         public int IdEvent { get; set; }
         public string Comment { get; set; }
@@ -20,14 +16,7 @@ namespace TrackMyBets.Business.Entities
         public int IdVisitTeam { get; set; }
         public int IdSport { get; set; }
         #endregion
-
-        #region Constructor
-        public EventEntity(BD_TRACKMYBETSContext dbCOntext)
-        {
-            _dbContext = dbCOntext;
-        }
-        #endregion
-
+        
         #region Public Methods
         /// <summary>
         /// Method that returns a list with all the event.
@@ -35,11 +24,14 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<EventEntity> Load()
         {
-            var events = new List<EventEntity>();
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var events = new List<EventEntity>();
 
-            _dbContext.Event.ToList().ForEach(x => events.Add(EventEntity.Load(x.IdEvent)));
+                dbContext.Event.ToList().ForEach(x => events.Add(EventEntity.Load(x.IdEvent)));
 
-            return events;
+                return events;
+            }
         }
 
         /// <summary>
@@ -49,12 +41,15 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static EventEntity Load(int eventId)
         {
-            var dbEvent = _dbContext.Event.Find(eventId);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbEvent = dbContext.Event.Find(eventId);
 
-            if (dbEvent == null)
-                return null;
+                if (dbEvent == null)
+                    return null;
 
-            return MapFromBD(dbEvent);
+                return MapFromBD(dbEvent);
+            }
         }
 
         /// <summary>
@@ -63,15 +58,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<EventEntity> Load(TeamEntity team)
         {
-            var events = new List<EventEntity>();
-
-            _dbContext.Event.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdLocalTeam == team.IdTeam || x.IdVisitTeam == team.IdTeam)
-                    events.Add(EventEntity.Load(x.IdEvent));
-            });
+                var events = new List<EventEntity>();
 
-            return events;
+                dbContext.Event.ToList().ForEach(x =>
+                {
+                    if (x.IdLocalTeam == team.IdTeam || x.IdVisitTeam == team.IdTeam)
+                        events.Add(EventEntity.Load(x.IdEvent));
+                });
+
+                return events;
+            }
         }
 
         /// <summary>
@@ -80,15 +78,18 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         public static List<EventEntity> Load(SportEntity sport)
         {
-            var events = new List<EventEntity>();
-
-            _dbContext.Event.ToList().ForEach(x =>
+            using (var dbContext = new BD_TRACKMYBETSContext())
             {
-                if (x.IdSport == sport.IdSport)
-                    events.Add(EventEntity.Load(x.IdEvent));
-            });
+                var events = new List<EventEntity>();
 
-            return events;
+                dbContext.Event.ToList().ForEach(x =>
+                {
+                    if (x.IdSport == sport.IdSport)
+                        events.Add(EventEntity.Load(x.IdEvent));
+                });
+
+                return events;
+            }
         }
 
         /// <summary>
@@ -97,14 +98,17 @@ namespace TrackMyBets.Business.Entities
         /// <param name="evento"></param>
         public static void Create(EventEntity evento)
         {
-            if (evento.Exist())
-                throw new DuplicatedEventException(evento.ToString());
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                if (evento.Exist())
+                    throw new DuplicatedEventException(evento.ToString());
 
-            var dbEvent = evento.MapToBD();
-            _dbContext.Event.Add(dbEvent);
-            _dbContext.SaveChanges();
+                var dbEvent = evento.MapToBD();
+                dbContext.Event.Add(dbEvent);
+                dbContext.SaveChanges();
 
-            evento.IdEvent = dbEvent.IdEvent;
+                evento.IdEvent = dbEvent.IdEvent;
+            }
         }
 
         /// <summary>
@@ -112,18 +116,21 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Update()
         {
-            var dbEvent = _dbContext.Event.Find(IdEvent);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbEvent = dbContext.Event.Find(IdEvent);
 
-            if (dbEvent == null)
-                throw new NotFoundEventException(IdEvent.ToString());
+                if (dbEvent == null)
+                    throw new NotFoundEventException(IdEvent.ToString());
 
-            dbEvent.Comment = Comment;
-            dbEvent.DateEvent = DateEvent;
-            dbEvent.IdLocalTeam = IdLocalTeam;
-            dbEvent.IdVisitTeam = IdVisitTeam;
-            dbEvent.IdSport = IdSport;
+                dbEvent.Comment = Comment;
+                dbEvent.DateEvent = DateEvent;
+                dbEvent.IdLocalTeam = IdLocalTeam;
+                dbEvent.IdVisitTeam = IdVisitTeam;
+                dbEvent.IdSport = IdSport;
 
-            _dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -131,15 +138,18 @@ namespace TrackMyBets.Business.Entities
         /// </summary>
         public void Delete()
         {
-            var dbEvent = _dbContext.Event.Find(IdEvent);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                var dbEvent = dbContext.Event.Find(IdEvent);
 
-            if (dbEvent == null)
-                throw new NotFoundEventException(IdEvent.ToString());
+                if (dbEvent == null)
+                    throw new NotFoundEventException(IdEvent.ToString());
 
-            PickEntity.Load(this).ForEach(x => x.Delete());
+                PickEntity.Load(this).ForEach(x => x.Delete());
 
-            _dbContext.Event.Remove(dbEvent);
-            _dbContext.SaveChanges();
+                dbContext.Event.Remove(dbEvent);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -159,7 +169,10 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal bool Exist()
         {
-            return _dbContext.Event.Any(x => x.IdLocalTeam == IdLocalTeam && x.IdVisitTeam == IdVisitTeam && x.DateEvent == DateEvent);
+            using (var dbContext = new BD_TRACKMYBETSContext())
+            {
+                return dbContext.Event.Any(x => x.IdLocalTeam == IdLocalTeam && x.IdVisitTeam == IdVisitTeam && x.DateEvent == DateEvent);
+            }
         }
 
         /// <summary>
@@ -187,7 +200,7 @@ namespace TrackMyBets.Business.Entities
         /// <returns></returns>
         internal static EventEntity MapFromBD(Event dbEvent)
         {
-            var eventEntity = new EventEntity(_dbContext)
+            var eventEntity = new EventEntity()
             {
                 IdEvent = dbEvent.IdEvent,
                 Comment = dbEvent.Comment,

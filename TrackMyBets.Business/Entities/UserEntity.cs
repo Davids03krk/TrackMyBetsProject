@@ -130,19 +130,20 @@ namespace TrackMyBets.Business.Entities
         /// <summary>
         /// Method that returns true if the authentication is correct
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="nickLogin"></param>
+        /// <param name="passwordLogin"></param>
         /// <returns></returns>
-        public bool Authenticate()
+        public static UserEntity Authenticate(string nickLogin, string passwordLogin)
         {
-            var dbUser = _dbContext.User.SingleOrDefault(x => x.Nick == Nick);
+            var dbUser = _dbContext.User.SingleOrDefault(x => x.Nick == nickLogin);
 
             if (dbUser == null)
-                return false;
+                return null;
 
-            if (!Authentication.VerifyPasswordHash(Password, dbUser.PasswordHash, dbUser.PasswordSalt))
-                return false;
+            if (!Authentication.VerifyPasswordHash(passwordLogin, dbUser.PasswordHash, dbUser.PasswordSalt))
+                return null;
 
-            return true;
+            return MapFromBD(dbUser);
         }
 
         /// <summary>

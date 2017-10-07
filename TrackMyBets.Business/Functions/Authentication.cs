@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TrackMyBets.Business.Functions
+﻿namespace TrackMyBets.Business.Functions
 {
     public static class Authentication
     {

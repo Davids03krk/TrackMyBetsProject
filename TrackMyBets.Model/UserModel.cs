@@ -78,4 +78,20 @@ namespace TrackMyBets.Model
         }
         #endregion
     }
+
+    public class UserLogin {
+        [Required]
+        public string Nick { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+    }
+
+    public class UserAuth {
+        public int IdUser { get; set; }
+
+        public string Nick { get; set; }
+
+        public string Token { get; set; }
+    }
 }

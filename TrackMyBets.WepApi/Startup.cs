@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,9 +31,8 @@ namespace TrackMyBets.WepApi
         {
             services.AddCors();
             services.AddMvc();
-
-            var connectionString = AppSettings.ConnetionString;
-            services.AddDbContext<BD_TRACKMYBETSContext>(options => options.UseSqlServer(connectionString));
+            
+            services.AddDbContext<BD_TRACKMYBETSContext>(options => options.UseSqlServer(AppSettings.ConnetionString));
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
         }

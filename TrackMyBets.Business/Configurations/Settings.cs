@@ -2,11 +2,7 @@
 {
     public class Settings
     {
-        public static string SecretAuth { get; set; }
-
-        public Settings() {
-            SecretAuth = "AARLOVCAHREO";
-        }
+        public const string SecretAuth = "AARLOVCAHREO";
     }
 }
 

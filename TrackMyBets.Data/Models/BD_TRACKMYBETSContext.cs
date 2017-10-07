@@ -339,9 +339,9 @@ namespace TrackMyBets.Data.Models
 
                 entity.Property(e => e.Phone).HasColumnType("nchar(9)");
 
-                entity.Property(e => e.PasswordHash).HasColumnType("varbinary(100)");
+                entity.Property(e => e.PasswordHash).HasColumnType("varbinary(64)");
 
-                entity.Property(e => e.PasswordSalt).HasColumnType("varbinary(100)");
+                entity.Property(e => e.PasswordSalt).HasColumnType("varbinary(128)");
             });
 
             modelBuilder.Entity<Withdrawal>(entity =>

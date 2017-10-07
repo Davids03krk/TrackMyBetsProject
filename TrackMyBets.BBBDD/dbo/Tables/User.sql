@@ -6,11 +6,13 @@
     [SurnameSecond] NVARCHAR (100)  NULL,
     [Phone]         NCHAR (9)       NULL,
     [Address]       NVARCHAR (250)  NULL,
-    [PasswordHash]  VARBINARY (100) NULL,
-    [PasswordSalt]  VARBINARY (100) NULL,
     [Email]         NVARCHAR (150)  NULL,
+    [PasswordHash]  VARBINARY (64)  NULL,
+    [PasswordSalt]  VARBINARY (128) NULL,
     CONSTRAINT [PK_User_IdUser] PRIMARY KEY CLUSTERED ([Id_User] ASC)
 );
+
+
 
 
 

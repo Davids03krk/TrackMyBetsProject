@@ -2,7 +2,7 @@
 {
     public class Settings
     {
-        public const string SecretAuth = "AARLOVCAHREO";
+        public const string SecretAuth = "JAUALRILAONVACJAAHCRIENOTO";
     }
 }
 

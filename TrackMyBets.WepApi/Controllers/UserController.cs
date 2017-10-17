@@ -12,11 +12,11 @@ using TrackMyBets.Business.Configurations;
 namespace TrackMyBets.WepApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/User")]
+    [Route("User")]
     public class UserController : Controller
     {
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public IActionResult Login([FromBody] UserLogin userLogin) {
 
             var userAuth = UserEntity.Authenticate(userLogin.Nick, userLogin.Password);
@@ -47,7 +47,7 @@ namespace TrackMyBets.WepApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public IActionResult Register([FromBody] UserModel userModel) {
             try {
                 UserEntity.Create(userModel.ToEntities());
@@ -57,7 +57,7 @@ namespace TrackMyBets.WepApi.Controllers
             }
         }
 
-        [HttpGet("{idUser}")]
+        [HttpGet("GetById/{idUser}")]
         public IActionResult GetById(int idUser) {
             try {
                 UserModel userModel = UserModel.FromEntity(UserEntity.Load(idUser));
@@ -72,7 +72,7 @@ namespace TrackMyBets.WepApi.Controllers
             }
         }
 
-        [HttpPost("update")]
+        [HttpPost("Update")]
         public IActionResult Update([FromBody] UserModel userModel) {
             try {
                 userModel.ToEntities().Update();
@@ -82,7 +82,7 @@ namespace TrackMyBets.WepApi.Controllers
             }
         }
 
-        [HttpDelete("{idUser}")]
+        [HttpDelete("Delete/{idUser}")]
         public IActionResult Delete(int idUser) {
             try {
                 UserEntity.Load(idUser).Delete();
